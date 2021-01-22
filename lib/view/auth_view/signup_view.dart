@@ -51,7 +51,7 @@ class SignupView extends StatelessWidget {
                                     fontSize: 14,
                                     color: Colors.black.withOpacity(0.7)),
                             text:
-                                "Please register to you account to contunie with MyApp."),
+                                "Please register to you account to contunie with Online Team Management Tool."),
                       ),
                     ),
                   ),

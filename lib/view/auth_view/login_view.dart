@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_team_management/util/extension.dart';
-import 'package:online_team_management/view/signup_view.dart';
+import 'package:online_team_management/view/auth_view/signup_view.dart';
 import 'package:online_team_management/widget/submit_button.dart';
 import 'package:provider/provider.dart';
 
@@ -63,7 +63,7 @@ class _LoginViewState extends State<LoginView> {
                                     fontSize: 14,
                                     color: Colors.black.withOpacity(0.7)),
                             text:
-                                "Plesase log in to your account to continue with MyApp."),
+                                "Plesase log in to your account to continue with Online Team Management Tool."),
                       ),
                     ),
                   ),
@@ -74,7 +74,7 @@ class _LoginViewState extends State<LoginView> {
                           Provider.of<LoginProcess>(context, listen: false)
                               .validateEmail(),*/
                       decoration: new InputDecoration(
-                        hintText: "Mail adresi",
+                        hintText: "Email Address",
                       ),
                       onChanged: (String value) {
                         /*setState(() {
@@ -92,7 +92,7 @@ class _LoginViewState extends State<LoginView> {
                               Provider.of<LoginProcess>(context, listen: false)
                                   .validatePassword(),*/
                           decoration: new InputDecoration(
-                            hintText: "Şifre",
+                            hintText: "Password",
                           ),
                           onChanged: (String value) {
                             /*setState(() {
