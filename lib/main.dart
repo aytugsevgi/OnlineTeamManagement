@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:online_team_management/theme/theme.dart';
-import 'package:online_team_management/view/home_view/home_view.dart';
 import 'package:online_team_management/view/auth_view/login_view.dart';
+import 'package:online_team_management/view/home_view/home_view.dart';
 
-void main() {
+main() {
   runApp(MyApp());
 }
 
