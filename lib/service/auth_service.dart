@@ -1,11 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthService {
   static final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
-  Future<AuthResult> signUp({String email, String password}) async {
+  Future<AuthResult> signUp(
+      {@required String email, @required String password}) async {
     try {
       return await firebaseAuth.createUserWithEmailAndPassword(
           email: email, password: password);

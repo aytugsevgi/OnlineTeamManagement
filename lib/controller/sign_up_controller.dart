@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:online_team_management/model/User.dart';
-import 'package:online_team_management/service/AuthService.dart';
+import 'package:online_team_management/service/auth_service.dart';
 import 'package:online_team_management/service/user_service.dart';
 
 class SignUp {

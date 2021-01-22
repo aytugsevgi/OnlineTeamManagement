@@ -2,20 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:online_team_management/theme/theme.dart';
 import 'package:online_team_management/view/auth_view/login_view.dart';
 import 'package:online_team_management/view/home_view/home_view.dart';
-<<<<<<< Updated upstream
 
 main() {
-=======
-import 'package:online_team_management/view/login_view.dart';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
->>>>>>> Stashed changes
   runApp(MyApp());
 }
 

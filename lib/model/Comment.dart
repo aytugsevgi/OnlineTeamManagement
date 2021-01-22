@@ -1,24 +1,39 @@
 class Comment {
-  String ownerUserId;
-  String taskId;
-  String content;
-  String createdAt;
+  String _ownerUserId;
+  String _taskId;
+  String _content;
+  String _createdAt;
 
-  Comment({this.ownerUserId, this.taskId, this.content, this.createdAt});
+  Comment(
+      {String ownerUserId, String taskId, String content, String createdAt}) {
+    this._ownerUserId = ownerUserId;
+    this._taskId = taskId;
+    this._content = content;
+    this._createdAt = createdAt;
+  }
+
+  String get ownerUserId => _ownerUserId;
+  set ownerUserId(String ownerUserId) => _ownerUserId = ownerUserId;
+  String get taskId => _taskId;
+  set taskId(String taskId) => _taskId = taskId;
+  String get content => _content;
+  set content(String content) => _content = content;
+  String get createdAt => _createdAt;
+  set createdAt(String createdAt) => _createdAt = createdAt;
 
   Comment.fromJson(Map<String, dynamic> json) {
-    ownerUserId = json['ownerUserId'];
-    taskId = json['taskId'];
-    content = json['content'];
-    createdAt = json['createdAt'];
+    _ownerUserId = json['ownerUserId'];
+    _taskId = json['taskId'];
+    _content = json['content'];
+    _createdAt = json['createdAt'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ownerUserId'] = this.ownerUserId;
-    data['taskId'] = this.taskId;
-    data['content'] = this.content;
-    data['createdAt'] = this.createdAt;
+    data['ownerUserId'] = this._ownerUserId;
+    data['taskId'] = this._taskId;
+    data['content'] = this._content;
+    data['createdAt'] = this._createdAt;
     return data;
   }
 }

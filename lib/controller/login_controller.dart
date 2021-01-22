@@ -1,4 +1,4 @@
-import 'package:online_team_management/service/AuthService.dart';
+import 'package:online_team_management/service/auth_service.dart';
 
 class LoginController {
   String email;

@@ -6,7 +6,7 @@ class UserService {
 
   Future<bool> saveUser(User user) async {
     try {
-      await _firestore.collection("Users").add(user.toJson());
+      await _firestore.collection("users").add(user.toJson());
       return true;
     } catch (e) {
       print("DEBUG couldn't save $e");
@@ -15,19 +15,19 @@ class UserService {
   }
 
   Future<bool> updateUser(User user) async {
-    try {
-      await _firestore.collection("Users").add(user.toJson());
-      return true;
-    } catch (e) {
-      print("DEBUG couldn't save $e");
-      return false;
-    }
+    Firestore.instance.collection('users').document().setData({
+      'firstName': user.firstName,
+      'lastName': user.lastName,
+      'email': user.email,
+      'membership': user.membership,
+      'isPremium': user.isPremium
+    });
   }
 
   Future<User> getCurrentUser(String uid) async {
     try {
       DocumentSnapshot currentUser =
-          await _firestore.collection("Users").document(uid).get();
+          await _firestore.collection("users").document(uid).get();
       Map<String, dynamic> temp = currentUser.data;
       User user = User.fromJson(temp);
       return user;
