@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
 
   _checkUserRegistered() {
     // user zaten login olmuş mu ?
+
     if (true) {
       return HomeView();
     } else {

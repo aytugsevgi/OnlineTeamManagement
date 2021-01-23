@@ -17,15 +17,15 @@ class TeamController {
     return TeamService().createTeam(team);
   }
 
-  Future<void> updateTeamName(String teamId, String givenName) {
-    TeamService().updateTeamName(teamId, givenName);
+  Future<bool> updateTeamName(String teamId, String givenName) {
+    return TeamService().updateTeamName(teamId, givenName);
   }
 
-  Future<String> addMemberToTeam(String teamId, User user) async {
+  Future<bool> addMemberToTeam(String teamId, User user) async {
     return TeamService().addMemberToTeam(teamId, user);
   }
 
-  Future<String> deleteMemberFromTeam(String teamId, String userId) async {
+  Future<bool> deleteMemberFromTeam(String teamId, String userId) async {
     return TeamService().deleteMemberFromTeam(teamId, userId);
   }
 }

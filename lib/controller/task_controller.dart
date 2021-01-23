@@ -35,7 +35,7 @@ class TaskController {
     return TaskService().updateTaskMembers(taskId, members);
   }
 
-  Future<String> assignTask(
+  Future<bool> assignTask(
       @required String taskId, @required List<String> users) async {
     return TaskService().assignTask(taskId, users);
   }

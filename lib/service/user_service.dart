@@ -15,16 +15,25 @@ class UserService {
   }
 
   Future<bool> updateUser(User user) async {
-    Firestore.instance.collection('users').document().setData({
-      'firstName': user.firstName,
-      'lastName': user.lastName,
-      'email': user.email,
-      'membership': user.membership,
-      'isPremium': user.isPremium
-    });
+    try {
+      await Firestore.instance
+          .collection('users')
+          .document(user.userId)
+          .setData({
+        'firstName': user.firstName,
+        'lastName': user.lastName,
+        'email': user.email,
+        'membership': user.membership,
+        'isPremium': user.isPremium
+      });
+      return true;
+    } catch (e) {
+      print("DEBUG: Error UserService updateUser: $e");
+      return false;
+    }
   }
 
-  Future<User> getCurrentUser(String uid) async {
+  Future<User> searchUser(String uid) async {
     try {
       DocumentSnapshot currentUser =
           await _firestore.collection("users").document(uid).get();

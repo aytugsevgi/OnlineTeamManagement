@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:online_team_management/model/User.dart';
+import 'package:online_team_management/service/user_service.dart';
 
 class AuthService {
   static final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -29,8 +31,19 @@ class AuthService {
     await firebaseAuth.signOut();
   }
 
-  Future<String> currentUser() async {
+  Future<User> currentUser() async {
     FirebaseUser currentUser = await firebaseAuth.currentUser();
-    return currentUser.uid;
+    User user = await UserService().searchUser(currentUser.uid);
+    return user;
+  }
+
+  Future<bool> singOut() async {
+    try {
+      await firebaseAuth.signOut();
+      return true;
+    } catch (e) {
+      print("Sign out hata:" + e.toString());
+      return false;
+    }
   }
 }

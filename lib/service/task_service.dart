@@ -16,34 +16,52 @@ class TaskService {
     }
   }
 
-  Future<void> updateTaskContent(String taskId, String givenContent) async {
-    Firestore.instance
-        .collection('tasks')
-        .document(taskId)
-        .setData({'content': givenContent});
+  Future<bool> updateTaskContent(String taskId, String givenContent) async {
+    try {
+      await Firestore.instance
+          .collection('tasks')
+          .document(taskId)
+          .setData({'content': givenContent});
+      return true;
+    } catch (e) {
+      print("DEBUG: Error TaskService updateTaskContent: $e");
+      return false;
+    }
   }
 
   Future<bool> updateTaskMembers(
       @required String taskId, @required List<String> members) async {
-    Firestore.instance
-        .collection('tasks')
-        .document(taskId)
-        .setData({'members': members});
+    try {
+      await Firestore.instance
+          .collection('tasks')
+          .document(taskId)
+          .setData({'members': members});
+      return true;
+    } catch (e) {
+      print("DEBUG: TaskService updateTaskMembers: $e");
+      return false;
+    }
   }
 
-  Future<String> assignTask(
+  Future<bool> assignTask(
       @required String taskId, @required List<String> users) async {
-    DocumentSnapshot foundTask =
-        await _firestore.collection("tasks").document(taskId).get();
-    Map<String, dynamic> temp = foundTask.data;
-    Task task = Task.fromJson(temp);
+    try {
+      DocumentSnapshot foundTask =
+          await _firestore.collection("tasks").document(taskId).get();
+      Map<String, dynamic> temp = foundTask.data;
+      Task task = Task.fromJson(temp);
 
-    task.members = users;
+      task.members = users;
 
-    Firestore.instance
-        .collection('tasks')
-        .document(taskId)
-        .setData({'members': task.members});
+      await Firestore.instance
+          .collection('tasks')
+          .document(taskId)
+          .setData({'members': task.members});
+      return true;
+    } catch (e) {
+      print("DEBUG: Error TaskService assignTask: $e");
+      return false;
+    }
   }
 
   Future<bool> deleteTask(@required String taskId) async {
