@@ -1,12 +1,38 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_team_management/util/extension.dart';
+import 'package:online_team_management/view/team_view/create_team_view.dart';
+import 'package:online_team_management/view/team_view/widget/team_card.dart';
 
 class TeamView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.themeData.primaryColorLight,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => CreateTeamView(),
+            ),
+          );
+        },
+        label: Row(
+          children: [
+            Icon(Icons.add),
+            SizedBox(
+              width: 4,
+            ),
+            Text(
+              "Create Team",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: context.themeData.primaryColorLight,
+              ),
+            ),
+          ],
+        ),
+      ),
       appBar: AppBar(
         elevation: 0,
         centerTitle: false,
@@ -25,8 +51,41 @@ class TeamView extends StatelessWidget {
             flex: 10,
             child: searchField(context),
           ),
-          Spacer(
+          Expanded(
             flex: 88,
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: context.dynamicWidth(0.06),
+              ),
+              child: ListView(
+                children: [
+                  SizedBox(
+                    height: context.dynamicHeight(0.21),
+                    width: context.dynamicWidth(0.6),
+                    child: TeamCard(
+                      title: "Power Puff Girls",
+                      countOfMembers: "10",
+                    ),
+                  ),
+                  SizedBox(
+                    height: context.dynamicHeight(0.21),
+                    width: context.dynamicWidth(0.6),
+                    child: TeamCard(
+                      title: "Star Wars",
+                      countOfMembers: "21",
+                    ),
+                  ),
+                  SizedBox(
+                    height: context.dynamicHeight(0.21),
+                    width: context.dynamicWidth(0.6),
+                    child: TeamCard(
+                      title: "Figth Clup",
+                      countOfMembers: "14",
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),

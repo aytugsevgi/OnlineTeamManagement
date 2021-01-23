@@ -5,28 +5,31 @@ import 'package:online_team_management/service/auth_service.dart';
 import 'package:online_team_management/service/user_service.dart';
 
 class SignUpController with ChangeNotifier {
-  GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  String firstName;
-  String lastName;
+  GlobalKey<FormState> formKey;
+  String firstName = "";
+  String lastName = "";
 
-  String email;
-  String password;
-  String confirmPassword;
+  String email = "";
+  String password = "";
+  String confirmPassword = "";
 
   Future<bool> signUp() async {
-    AuthResult result =
-        await AuthService().signUp(email: email, password: password);
+    if (validateSignUp()) {
+      AuthResult result =
+          await AuthService().signUp(email: email, password: password);
 
-    if (result != null) {
-      User user = new User(
-          firstName: firstName,
-          lastName: lastName,
-          email: email,
-          isPremium: false,
-          membership: [],
-          userId: result.user.uid);
-      return UserService().saveUser(user);
+      if (result != null) {
+        User user = new User(
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            isPremium: false,
+            membership: [],
+            userId: result.user.uid);
+        return UserService().saveUser(user);
+      }
     }
+
     return false;
   }
 
@@ -53,14 +56,16 @@ class SignUpController with ChangeNotifier {
 
   String firstNameValidator() {
     if (firstName.isEmpty) {
-      return "Name can't be empty";
+      print("1");
+      return "First name can't be empty";
     }
+    print("2");
     return null;
   }
 
   String lastNameValidator() {
     if (lastName.isEmpty) {
-      return "Name can't be empty";
+      return "Last name can't be empty";
     }
     return null;
   }

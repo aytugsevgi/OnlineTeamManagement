@@ -70,9 +70,3 @@ class HomeCard extends StatelessWidget {
         ));
   }
 }
-
-Widget homeCard(
-    {@required context,
-    @required List<Color> colors,
-    @required IconData icon,
-    @required String title}) {}

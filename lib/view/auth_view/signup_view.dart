@@ -3,12 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:online_team_management/controller/sign_up_controller.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/view/home_view/home_view.dart';
+import 'package:online_team_management/widget/loading_view.dart';
 import 'package:online_team_management/widget/submit_button.dart';
+import 'package:online_team_management/widget/transparent_route.dart';
 import 'package:provider/provider.dart';
 
 class SignupView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Provider.of<SignUpController>(context, listen: false).formKey =
+        new GlobalKey<FormState>();
     return Scaffold(
       body: SingleChildScrollView(
         physics: ScrollPhysics(parent: ClampingScrollPhysics()),
@@ -63,8 +67,10 @@ class SignupView extends StatelessWidget {
                     flex: 12,
                     child: TextFormField(
                         decoration: new InputDecoration(
-                          hintText: "First Name",
-                        ),
+                            hintText: "First Name",
+                            errorStyle: context
+                                .themeData.inputDecorationTheme.errorStyle
+                                .copyWith(color: Colors.red.withOpacity(0.8))),
                         validator: (value) => Provider.of<SignUpController>(
                                 context,
                                 listen: false)
@@ -78,8 +84,10 @@ class SignupView extends StatelessWidget {
                     flex: 12,
                     child: TextFormField(
                         decoration: new InputDecoration(
-                          hintText: "Last Name",
-                        ),
+                            hintText: "Last Name",
+                            errorStyle: context
+                                .themeData.inputDecorationTheme.errorStyle
+                                .copyWith(color: Colors.red.withOpacity(0.8))),
                         validator: (value) => Provider.of<SignUpController>(
                                 context,
                                 listen: false)
@@ -93,8 +101,10 @@ class SignupView extends StatelessWidget {
                     flex: 12,
                     child: TextFormField(
                         decoration: new InputDecoration(
-                          hintText: "Email Address",
-                        ),
+                            hintText: "Email Address",
+                            errorStyle: context
+                                .themeData.inputDecorationTheme.errorStyle
+                                .copyWith(color: Colors.red.withOpacity(0.8))),
                         validator: (value) => Provider.of<SignUpController>(
                                 context,
                                 listen: false)
@@ -108,8 +118,10 @@ class SignupView extends StatelessWidget {
                     flex: 12,
                     child: TextFormField(
                         decoration: new InputDecoration(
-                          hintText: "Password",
-                        ),
+                            hintText: "Password",
+                            errorStyle: context
+                                .themeData.inputDecorationTheme.errorStyle
+                                .copyWith(color: Colors.red.withOpacity(0.8))),
                         validator: (value) => Provider.of<SignUpController>(
                                 context,
                                 listen: false)
@@ -123,8 +135,11 @@ class SignupView extends StatelessWidget {
                       flex: 12,
                       child: TextFormField(
                           decoration: new InputDecoration(
-                            hintText: "Confirm Password",
-                          ),
+                              hintText: "Confirm Password",
+                              errorStyle: context
+                                  .themeData.inputDecorationTheme.errorStyle
+                                  .copyWith(
+                                      color: Colors.red.withOpacity(0.8))),
                           validator: (value) => Provider.of<SignUpController>(
                                   context,
                                   listen: false)
@@ -150,24 +165,7 @@ class SignupView extends StatelessWidget {
                               fontSize: context.dynamicWidth(0.035)),
                         ),
                         onTap: () async {
-                          bool result = await Provider.of<SignUpController>(
-                                  context,
-                                  listen: false)
-                              .signUp();
-                          if (result) {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) => HomeView(),
-                              ),
-                            );
-                          } else {
-                            Flushbar(
-                              backgroundColor: Colors.red,
-                              title: "Oops..",
-                              message: "Invalid Sign Up",
-                              duration: Duration(seconds: 3),
-                            )..show(context);
-                          }
+                          await onTapSignUp(context);
                         } /*_submitButtonOnTap(context)*/,
                       ))),
                   Expanded(
@@ -209,6 +207,27 @@ class SignupView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Future onTapSignUp(context) async {
+    Navigator.push(
+        context, TransparentRoute(builder: (context) => LoadingView()));
+    bool result =
+        await Provider.of<SignUpController>(context, listen: false).signUp();
+    if (result) {
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => HomeView(),
+          ),
+          (route) => false);
+    } else {
+      Flushbar(
+        backgroundColor: Colors.red,
+        title: "Oops..",
+        message: "Invalid Sign Up",
+        duration: Duration(seconds: 3),
+      )..show(context);
+    }
   }
 /*
   _submitButtonOnTap(BuildContext context) {

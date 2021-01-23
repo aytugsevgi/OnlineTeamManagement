@@ -4,11 +4,9 @@ import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/service/auth_service.dart';
 
 class LoginController with ChangeNotifier {
-  GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  String email;
-  String password;
-
-  get formKey => _formKey;
+  GlobalKey<FormState> formKey;
+  String email = "";
+  String password = "";
 
   Future<bool> login() async {
     if (isLoginValidate()) {
@@ -49,6 +47,6 @@ class LoginController with ChangeNotifier {
   }
 
   bool isLoginValidate() {
-    return _formKey.currentState.validate();
+    return formKey.currentState.validate();
   }
 }

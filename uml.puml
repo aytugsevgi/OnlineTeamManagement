@@ -1,0 +1,295 @@
+@startuml
+set namespaceSeparator ::
+
+class "online_team_management::widget::transparent_route.dart::TransparentRoute" {
+  +Widget Function(BuildContext) builder
+  +bool opaque
+  +Color barrierColor
+  +dynamic barrierLabel
+  +bool maintainState
+  +Duration transitionDuration
+  +Widget buildPage()
+}
+
+"online_team_management::widget::transparent_route.dart::TransparentRoute" o-- "flutter::src::widgets::framework.dart::Widget Function(BuildContext)"
+"online_team_management::widget::transparent_route.dart::TransparentRoute" o-- "dart::ui::Color"
+"flutter::src::widgets::pages.dart::PageRoute<T>" <|-- "online_team_management::widget::transparent_route.dart::TransparentRoute"
+
+class "online_team_management::widget::fade_route.dart::FadeRoute" {
+  +Widget page
+}
+
+"online_team_management::widget::fade_route.dart::FadeRoute" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::pages.dart::PageRouteBuilder<T>" <|-- "online_team_management::widget::fade_route.dart::FadeRoute"
+
+class "online_team_management::widget::loading_view.dart::LoadingView" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "online_team_management::widget::loading_view.dart::LoadingView"
+
+class "online_team_management::widget::submit_button.dart::SubmitButton" {
+  +Widget child
+  +Function onTap
+  +List<Color> colors
+  +Widget build()
+}
+
+"online_team_management::widget::submit_button.dart::SubmitButton" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "online_team_management::widget::submit_button.dart::SubmitButton"
+
+class "online_team_management::controller::login_controller.dart::LoginController" {
+  {static} -GlobalKey<FormState> _formKey
+  +dynamic email
+  +dynamic password
+  +dynamic formKey
+  +Future login()
+  +Future isAlreadyLogin()
+  +dynamic validateEmail()
+  +dynamic validatePassword()
+  +bool isLoginValidate()
+}
+
+"online_team_management::controller::login_controller.dart::LoginController" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "online_team_management::controller::login_controller.dart::LoginController"
+
+class "online_team_management::controller::home_controller.dart::HomeController" {
+  +Future signOut()
+}
+
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "online_team_management::controller::home_controller.dart::HomeController"
+
+class "online_team_management::controller::team_controller.dart::TeamController" {
+  +dynamic teamId
+  +dynamic managerId
+  +List<User> members
+  +dynamic teamName
+  +Future createTeam()
+  +Future updateTeamName()
+  +Future addMemberToTeam()
+  +Future deleteMemberFromTeam()
+}
+
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "online_team_management::controller::team_controller.dart::TeamController"
+
+class "online_team_management::controller::task_controller.dart::TaskController" {
+  +dynamic taskId
+  +dynamic teamId
+  +List members
+  +dynamic content
+  +Timestamp dueDate
+  +Timestamp createdAt
+  +Future addTask()
+  +Future updateTaskContent()
+  +Future updateTaskMembers()
+  +Future assignTask()
+  +Future deleteTask()
+}
+
+"online_team_management::controller::task_controller.dart::TaskController" o-- "cloud_firestore_platform_interface::src::timestamp.dart::Timestamp"
+
+class "online_team_management::controller::sign_up_controller.dart::SignUpController" {
+  {static} -GlobalKey<FormState> _formKey
+  +dynamic firstName
+  +dynamic lastName
+  +dynamic email
+  +dynamic password
+  +dynamic confirmPassword
+  +dynamic formKey
+  +Future signUp()
+  +bool validateSignUp()
+  +dynamic emailValidator()
+  +dynamic passwordValidator()
+  +dynamic firstNameValidator()
+  +dynamic lastNameValidator()
+  +dynamic confirmPasswordValidator()
+}
+
+"online_team_management::controller::sign_up_controller.dart::SignUpController" o-- "flutter::src::widgets::framework.dart::GlobalKey<FormState>"
+"flutter::src::foundation::change_notifier.dart::ChangeNotifier" <|-- "online_team_management::controller::sign_up_controller.dart::SignUpController"
+
+class "online_team_management::main.dart::MyApp" {
+  -Widget _errorView
+  +Widget build()
+  -Future _checkUserRegistered()
+}
+
+"online_team_management::main.dart::MyApp" o-- "flutter::src::widgets::framework.dart::Widget"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "online_team_management::main.dart::MyApp"
+
+class "online_team_management::model::Message.dart::Message" {
+  -String _messageId
+  -String _senderId
+  -String _receiverId
+  -String _content
+  -String _createdAt
+  +String messageId
+  +String senderId
+  +String receiverId
+  +String content
+  +String createdAt
+  +Map toJson()
+}
+
+class "online_team_management::model::Team.dart::Team" {
+  -String _teamId
+  -String _managerId
+  -List<User> _members
+  -String _teamName
+  +String teamId
+  +String managerId
+  +List<User> members
+  +String teamName
+  +Map toJson()
+}
+
+class "online_team_management::model::User.dart::User" {
+  -String _userId
+  -String _firstName
+  -String _lastName
+  -String _email
+  -List<String> _membership
+  -bool _isPremium
+  +String userId
+  +String firstName
+  +String lastName
+  +String email
+  +List<String> membership
+  +bool isPremium
+  +Map toJson()
+}
+
+class "online_team_management::model::Repo.dart::Repo" {
+  +TaskId taskId
+  +Map toJson()
+}
+
+"online_team_management::model::Repo.dart::Repo" o-- "online_team_management::model::Repo.dart::TaskId"
+
+class "online_team_management::model::Repo.dart::TaskId" {
+  +List<String> commentId
+  +Map toJson()
+}
+
+class "online_team_management::model::Comment.dart::Comment" {
+  -String _ownerUserId
+  -String _taskId
+  -String _content
+  -String _createdAt
+  +String ownerUserId
+  +String taskId
+  +String content
+  +String createdAt
+  +Map toJson()
+}
+
+class "online_team_management::model::Task.dart::Task" {
+  -String _taskId
+  -String _teamId
+  -List<String> _members
+  -String _content
+  -Timestamp _dueDate
+  -Timestamp _createdAt
+  +String taskId
+  +String teamId
+  +List<String> members
+  +String content
+  +Timestamp dueDate
+  +Timestamp createdAt
+  +Map toJson()
+}
+
+"online_team_management::model::Task.dart::Task" o-- "cloud_firestore_platform_interface::src::timestamp.dart::Timestamp"
+
+class "online_team_management::view::home_view::home_view.dart::HomeView" {
+  +Widget build()
+  -AppBar _appBar()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "online_team_management::view::home_view::home_view.dart::HomeView"
+
+class "online_team_management::view::home_view::widget::home_card.dart::HomeCard" {
+  +List<Color> colors
+  +IconData icon
+  +dynamic title
+  +dynamic subtitle
+  +Function onTap
+  +Widget build()
+}
+
+"online_team_management::view::home_view::widget::home_card.dart::HomeCard" o-- "flutter::src::widgets::icon_data.dart::IconData"
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "online_team_management::view::home_view::widget::home_card.dart::HomeCard"
+
+class "online_team_management::view::auth_view::login_view.dart::LoginView" {
+  +bool isTapButton
+  +Widget build()
+  +Future onTapLogin()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "online_team_management::view::auth_view::login_view.dart::LoginView"
+
+class "online_team_management::view::auth_view::signup_view.dart::SignupView" {
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "online_team_management::view::auth_view::signup_view.dart::SignupView"
+
+class "online_team_management::view::team_view::widget::team_card.dart::TeamCard" {
+  +dynamic title
+  +dynamic subtitle
+  +Function onTap
+  +Widget build()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "online_team_management::view::team_view::widget::team_card.dart::TeamCard"
+
+class "online_team_management::view::team_view::team_view.dart::TeamView" {
+  +Widget build()
+  +Padding searchField()
+}
+
+"flutter::src::widgets::framework.dart::StatelessWidget" <|-- "online_team_management::view::team_view::team_view.dart::TeamView"
+
+class "online_team_management::service::team_service.dart::TeamService" {
+  -Firestore _firestore
+  +Future createTeam()
+  +Future updateTeamName()
+  +Future addMemberToTeam()
+  +Future deleteMemberFromTeam()
+}
+
+"online_team_management::service::team_service.dart::TeamService" o-- "cloud_firestore::cloud_firestore.dart::Firestore"
+
+class "online_team_management::service::task_service.dart::TaskService" {
+  -Firestore _firestore
+  +Future addTask()
+  +Future updateTaskContent()
+  +Future updateTaskMembers()
+  +Future assignTask()
+  +Future deleteTask()
+  +Future checkCompletedTask()
+}
+
+"online_team_management::service::task_service.dart::TaskService" o-- "cloud_firestore::cloud_firestore.dart::Firestore"
+
+class "online_team_management::service::auth_service.dart::AuthService" {
+  {static} +FirebaseAuth firebaseAuth
+  +Future signUp()
+  +Future login()
+  +Future currentUser()
+  +Future singOut()
+}
+
+"online_team_management::service::auth_service.dart::AuthService" o-- "firebase_auth::firebase_auth.dart::FirebaseAuth"
+
+class "online_team_management::service::user_service.dart::UserService" {
+  -Firestore _firestore
+  +Future saveUser()
+  +Future updateUser()
+  +Future searchUser()
+}
+
+"online_team_management::service::user_service.dart::UserService" o-- "cloud_firestore::cloud_firestore.dart::Firestore"
+
+
+@enduml

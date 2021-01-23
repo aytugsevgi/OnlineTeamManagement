@@ -17,6 +17,8 @@ class LoginView extends StatelessWidget {
   Widget build(BuildContext context) {
     //var loginValidate = Provider.of<LoginValidate>(context, listen: false);
     //var currentUser = Provider.of<CurrentUser>(context, listen: false);
+    Provider.of<LoginController>(context, listen: false).formKey =
+        new GlobalKey<FormState>();
     return Scaffold(
       body: SingleChildScrollView(
         physics: ScrollPhysics(parent: ClampingScrollPhysics()),
@@ -175,8 +177,11 @@ class LoginView extends StatelessWidget {
     print("DEBUG: Auth result: $result");
     Navigator.pop(context);
     if (result == true) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomeView()));
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => HomeView(),
+          ),
+          (route) => false);
     } else {
       Flushbar(
         backgroundColor: Colors.red,
