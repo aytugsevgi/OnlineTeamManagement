@@ -1,4 +1,6 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
+import 'package:online_team_management/controller/sign_up_controller.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/widget/submit_button.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +17,8 @@ class SignupView extends StatelessWidget {
             height: context.dynamicHeight(1),
             width: context.dynamicWidth(1),
             child: Form(
-              /* key: Provider.of<SignupProcess>(context, listen: false).formKey,*/
+              key:
+                  Provider.of<SignUpController>(context, listen: false).formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -58,17 +61,47 @@ class SignupView extends StatelessWidget {
                   Expanded(
                     flex: 12,
                     child: TextFormField(
-                      decoration: new InputDecoration(
-                        hintText: "Email Address",
-                      ),
-                      /*validator: (value) =>
-                            Provider.of<SignupProcess>(context, listen: false)
-                                .emailValidator(),*/
-                      /*onChanged: (String value) {
-                          Provider.of<SignupProcess>(context, listen: false)
+                        decoration: new InputDecoration(
+                          hintText: "First Name",
+                        ),
+                        validator: (value) => Provider.of<SignUpController>(
+                                context,
+                                listen: false)
+                            .firstNameValidator(),
+                        onChanged: (String value) {
+                          Provider.of<SignUpController>(context, listen: false)
+                              .firstName = value;
+                        }),
+                  ),
+                  Expanded(
+                    flex: 12,
+                    child: TextFormField(
+                        decoration: new InputDecoration(
+                          hintText: "Last Name",
+                        ),
+                        validator: (value) => Provider.of<SignUpController>(
+                                context,
+                                listen: false)
+                            .lastNameValidator(),
+                        onChanged: (String value) {
+                          Provider.of<SignUpController>(context, listen: false)
+                              .lastName = value;
+                        }),
+                  ),
+                  Expanded(
+                    flex: 12,
+                    child: TextFormField(
+                        decoration: new InputDecoration(
+                          hintText: "Email Address",
+                        ),
+                        validator: (value) => Provider.of<SignUpController>(
+                                context,
+                                listen: false)
+                            .emailValidator(),
+                        onChanged: (String value) {
+                          Provider.of<SignUpController>(context, listen: false)
                               .email = value;
-                        }*/
-                    ),
+                        }),
                   ),
                   Expanded(
                     flex: 12,
@@ -76,12 +109,13 @@ class SignupView extends StatelessWidget {
                         decoration: new InputDecoration(
                           hintText: "Password",
                         ),
-                        /*validator: (value) =>
-                            Provider.of<SignupProcess>(context, listen: false)
-                                .passwordValidator(),*/
+                        validator: (value) => Provider.of<SignUpController>(
+                                context,
+                                listen: false)
+                            .passwordValidator(),
                         onChanged: (String value) {
-                          /*Provider.of<SignupProcess>(context, listen: false)
-                              .password = value;*/
+                          Provider.of<SignUpController>(context, listen: false)
+                              .password = value;
                         }),
                   ),
                   Expanded(
@@ -90,12 +124,14 @@ class SignupView extends StatelessWidget {
                           decoration: new InputDecoration(
                             hintText: "Confirm Password",
                           ),
-                          /*validator: (value) =>
-                              Provider.of<SignupProcess>(context, listen: false)
-                                  .confirmPasswordValidator(),*/
+                          validator: (value) => Provider.of<SignUpController>(
+                                  context,
+                                  listen: false)
+                              .confirmPasswordValidator(),
                           onChanged: (String value) {
-                            /*Provider.of<SignupProcess>(context, listen: false)
-                                .confirmPassword = value;*/
+                            Provider.of<SignUpController>(context,
+                                    listen: false)
+                                .confirmPassword = value;
                           })),
                   Expanded(
                       flex: 14,
@@ -112,10 +148,30 @@ class SignupView extends StatelessWidget {
                               color: Colors.white,
                               fontSize: context.dynamicWidth(0.035)),
                         ),
-                        onTap: () {} /*_submitButtonOnTap(context)*/,
+                        onTap: () async {
+                          bool result = await Provider.of<SignUpController>(
+                                  context,
+                                  listen: false)
+                              .signUp();
+                          if (result) {
+                            Flushbar(
+                              backgroundColor: Colors.green,
+                              title: "Success",
+                              message: "Valid Sign Up",
+                              duration: Duration(seconds: 3),
+                            )..show(context);
+                          } else {
+                            Flushbar(
+                              backgroundColor: Colors.red,
+                              title: "Oops..",
+                              message: "Invalid Sign Up",
+                              duration: Duration(seconds: 3),
+                            )..show(context);
+                          }
+                        } /*_submitButtonOnTap(context)*/,
                       ))),
                   Expanded(
-                    flex: 15,
+                    flex: 10,
                     child: Center(
                       child: InkWell(
                         splashColor: Colors.transparent,
@@ -145,7 +201,7 @@ class SignupView extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Spacer(flex: 4),
+                  Spacer(flex: 2),
                 ],
               ),
             ),

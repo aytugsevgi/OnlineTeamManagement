@@ -13,13 +13,15 @@ class LoginController with ChangeNotifier {
   Future<bool> login() async {
     if (isLoginValidate()) {
       bool result = await AuthService().login(email: email, password: password);
-      if (result == null) {
+      if (result) {
         // giriş işlemi başarılı
         return true;
       }
       // giriş işlemi başarısız - firebase tarafından başarısız
+      print("DEBUG: Firebase tarafından başarısız");
       return false;
     }
+    print("DEBUG: Code tarafından başarısız");
     // giriş işlemi başarısız - source code tarafından başarısız
     return false;
   }

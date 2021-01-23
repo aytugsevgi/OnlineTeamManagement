@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:online_team_management/controller/login_controller.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/view/auth_view/signup_view.dart';
+import 'package:online_team_management/view/home_view/home_view.dart';
 import 'package:online_team_management/widget/submit_button.dart';
 import 'package:provider/provider.dart';
 
@@ -122,7 +123,12 @@ class _LoginViewState extends State<LoginView> {
                                   listen: false)
                               .login();
                           print("DEBUG: Auth result: $result");
-                          if (!result) {
+                          if (result == true) {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HomeView()));
+                          } else {
                             Flushbar(
                               backgroundColor: Colors.red,
                               title: "Oops..",

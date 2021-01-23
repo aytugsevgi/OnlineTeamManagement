@@ -21,8 +21,10 @@ class AuthService {
     try {
       await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+
       return true;
     } catch (e) {
+      print("DEBUG: $e");
       return false;
     }
   }

@@ -4,8 +4,8 @@ import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/service/auth_service.dart';
 import 'package:online_team_management/service/user_service.dart';
 
-class SignUp with ChangeNotifier {
-  GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
+class SignUpController with ChangeNotifier {
+  GlobalKey<FormState> formKey = new GlobalKey<FormState>();
   String firstName;
   String lastName;
 
@@ -31,7 +31,7 @@ class SignUp with ChangeNotifier {
   }
 
   bool validateSignUp() {
-    return _formKey.currentState.validate();
+    return formKey.currentState.validate();
   }
 
   String emailValidator() {
