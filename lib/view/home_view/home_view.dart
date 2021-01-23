@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:online_team_management/controller/home_controller.dart';
 import 'package:online_team_management/util/extension.dart';
+import 'package:online_team_management/view/auth_view/login_view.dart';
 import 'package:online_team_management/view/home_view/widget/home_card.dart';
 import 'package:online_team_management/view/team_view/team_view.dart';
 import 'package:online_team_management/widget/fade_route.dart';
+import 'package:online_team_management/widget/loading_view.dart';
+import 'package:provider/provider.dart';
 
 class HomeView extends StatelessWidget {
   @override
@@ -96,7 +100,18 @@ class HomeView extends StatelessWidget {
             icon: Icon(CupertinoIcons.settings_solid,
                 size: context.dynamicWidth(0.1),
                 color: context.themeData.primaryColorDark),
-            onPressed: () {})
+            onPressed: () async {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => LoadingView()));
+              bool isSuccess =
+                  await Provider.of<HomeController>(context, listen: false)
+                      .signOut();
+              Navigator.pop(context);
+              if (isSuccess) {
+                Navigator.pushReplacement(context,
+                    MaterialPageRoute(builder: (context) => LoginView()));
+              }
+            })
       ],
     );
   }

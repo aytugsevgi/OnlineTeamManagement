@@ -2,6 +2,7 @@ import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:online_team_management/controller/sign_up_controller.dart';
 import 'package:online_team_management/util/extension.dart';
+import 'package:online_team_management/view/home_view/home_view.dart';
 import 'package:online_team_management/widget/submit_button.dart';
 import 'package:provider/provider.dart';
 
@@ -154,12 +155,11 @@ class SignupView extends StatelessWidget {
                                   listen: false)
                               .signUp();
                           if (result) {
-                            Flushbar(
-                              backgroundColor: Colors.green,
-                              title: "Success",
-                              message: "Valid Sign Up",
-                              duration: Duration(seconds: 3),
-                            )..show(context);
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => HomeView(),
+                              ),
+                            );
                           } else {
                             Flushbar(
                               backgroundColor: Colors.red,

@@ -5,15 +5,13 @@ import 'package:online_team_management/controller/login_controller.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/view/auth_view/signup_view.dart';
 import 'package:online_team_management/view/home_view/home_view.dart';
+import 'package:online_team_management/widget/fade_route.dart';
+import 'package:online_team_management/widget/loading_view.dart';
 import 'package:online_team_management/widget/submit_button.dart';
+import 'package:online_team_management/widget/transparent_route.dart';
 import 'package:provider/provider.dart';
 
-class LoginView extends StatefulWidget {
-  @override
-  _LoginViewState createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
+class LoginView extends StatelessWidget {
   bool isTapButton = false;
   @override
   Widget build(BuildContext context) {
@@ -78,10 +76,8 @@ class _LoginViewState extends State<LoginView> {
                         hintText: "Email Address",
                       ),
                       onChanged: (String value) {
-                        setState(() {
-                          Provider.of<LoginController>(context, listen: false)
-                              .email = value;
-                        });
+                        Provider.of<LoginController>(context, listen: false)
+                            .email = value;
                       },
                     ),
                   ),
@@ -96,11 +92,8 @@ class _LoginViewState extends State<LoginView> {
                             hintText: "Password",
                           ),
                           onChanged: (String value) {
-                            setState(() {
-                              Provider.of<LoginController>(context,
-                                      listen: false)
-                                  .password = value;
-                            });
+                            Provider.of<LoginController>(context, listen: false)
+                                .password = value;
                           })),
                   Expanded(
                       flex: 14,
@@ -118,25 +111,8 @@ class _LoginViewState extends State<LoginView> {
                               fontSize: context.dynamicWidth(0.035)),
                         ),
                         onTap: () async {
-                          bool result = await Provider.of<LoginController>(
-                                  context,
-                                  listen: false)
-                              .login();
-                          print("DEBUG: Auth result: $result");
-                          if (result == true) {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => HomeView()));
-                          } else {
-                            Flushbar(
-                              backgroundColor: Colors.red,
-                              title: "Oops..",
-                              message: "Invalid login",
-                              duration: Duration(seconds: 3),
-                            )..show(context);
-                          }
-                        } /*_submitButtonOnTap(context)*/,
+                          await onTapLogin(context);
+                        },
                       ))),
                   Expanded(
                       flex: 12,
@@ -189,5 +165,25 @@ class _LoginViewState extends State<LoginView> {
         ),
       ),
     );
+  }
+
+  Future onTapLogin(context) async {
+    Navigator.push(
+        context, TransparentRoute(builder: (context) => LoadingView()));
+    bool result =
+        await Provider.of<LoginController>(context, listen: false).login();
+    print("DEBUG: Auth result: $result");
+    Navigator.pop(context);
+    if (result == true) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomeView()));
+    } else {
+      Flushbar(
+        backgroundColor: Colors.red,
+        title: "Oops..",
+        message: "Invalid login",
+        duration: Duration(seconds: 3),
+      )..show(context);
+    }
   }
 }

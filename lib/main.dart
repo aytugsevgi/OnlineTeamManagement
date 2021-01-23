@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:online_team_management/controller/home_controller.dart';
 import 'package:online_team_management/controller/login_controller.dart';
 import 'package:online_team_management/controller/sign_up_controller.dart';
 import 'package:online_team_management/theme/theme.dart';
@@ -11,6 +12,7 @@ main() {
     providers: [
       ChangeNotifierProvider(create: (context) => LoginController()),
       ChangeNotifierProvider(create: (context) => SignUpController()),
+      ChangeNotifierProvider(create: (context) => HomeController()),
     ],
     child: MyApp(),
   ));
@@ -33,7 +35,9 @@ class MyApp extends StatelessWidget {
               }
               return _errorView;
             }
-            return CircularProgressIndicator();
+            return Container(
+                color: Colors.white,
+                child: Center(child: CircularProgressIndicator()));
           }),
     );
   }

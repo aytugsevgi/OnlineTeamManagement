@@ -19,10 +19,13 @@ class AuthService {
   Future<bool> login(
       {@required String email, @required String password}) async {
     try {
-      await firebaseAuth.signInWithEmailAndPassword(
+      AuthResult authResult = await firebaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
 
-      return true;
+      if (authResult.user != null) {
+        return true;
+      }
+      return false;
     } catch (e) {
       print("DEBUG: $e");
       return false;
@@ -31,6 +34,7 @@ class AuthService {
 
   Future<User> currentUser() async {
     FirebaseUser currentUser = await firebaseAuth.currentUser();
+
     if (currentUser != null) {
       User user = await UserService().searchUser(currentUser.uid);
       return user;

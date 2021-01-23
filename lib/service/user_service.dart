@@ -6,7 +6,10 @@ class UserService {
 
   Future<bool> saveUser(User user) async {
     try {
-      await _firestore.collection("users").add(user.toJson());
+      await _firestore
+          .collection("users")
+          .document(user.userId)
+          .setData(user.toJson());
       return true;
     } catch (e) {
       print("DEBUG couldn't save $e");
