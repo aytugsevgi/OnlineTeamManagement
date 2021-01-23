@@ -33,8 +33,11 @@ class AuthService {
 
   Future<User> currentUser() async {
     FirebaseUser currentUser = await firebaseAuth.currentUser();
-    User user = await UserService().searchUser(currentUser.uid);
-    return user;
+    if (currentUser != null) {
+      User user = await UserService().searchUser(currentUser.uid);
+      return user;
+    }
+    return null;
   }
 
   Future<bool> singOut() async {
