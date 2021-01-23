@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:online_team_management/controller/login_controller.dart';
-import 'package:online_team_management/model/User.dart';
-import 'package:online_team_management/service/auth_service.dart';
 import 'package:online_team_management/theme/theme.dart';
 import 'package:online_team_management/view/auth_view/login_view.dart';
 import 'package:online_team_management/view/home_view/home_view.dart';
+import "package:provider/provider.dart";
 
 main() {
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => LoginController()),
+    ],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -34,10 +38,9 @@ class MyApp extends StatelessWidget {
 
   Future<Widget> _checkUserRegistered() async {
     // user zaten login olmuş mu ?
-    print("Hi");
+
     bool isAlreadyLogin = await LoginController().isAlreadyLogin();
     print(isAlreadyLogin);
-    return HomeView();
     if (isAlreadyLogin) {
       return HomeView();
     }

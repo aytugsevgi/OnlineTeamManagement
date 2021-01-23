@@ -27,10 +27,6 @@ class AuthService {
     }
   }
 
-  Future<void> signOut() async {
-    await firebaseAuth.signOut();
-  }
-
   Future<User> currentUser() async {
     FirebaseUser currentUser = await firebaseAuth.currentUser();
     if (currentUser != null) {

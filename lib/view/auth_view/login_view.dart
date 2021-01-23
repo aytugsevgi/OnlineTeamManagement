@@ -1,5 +1,7 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:online_team_management/controller/login_controller.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/view/auth_view/signup_view.dart';
 import 'package:online_team_management/widget/submit_button.dart';
@@ -11,8 +13,6 @@ class LoginView extends StatefulWidget {
 }
 
 class _LoginViewState extends State<LoginView> {
-  String _email;
-  String _password;
   bool isTapButton = false;
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class _LoginViewState extends State<LoginView> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Form(
-              //key: Provider.of<LoginProcess>(context, listen: false).formKey,
+              key: Provider.of<LoginController>(context, listen: false).formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -70,36 +70,36 @@ class _LoginViewState extends State<LoginView> {
                   Expanded(
                     flex: 12,
                     child: TextFormField(
-                      /*validator: (value) =>
-                          Provider.of<LoginProcess>(context, listen: false)
-                              .validateEmail(),*/
+                      validator: (value) =>
+                          Provider.of<LoginController>(context, listen: false)
+                              .validateEmail(),
                       decoration: new InputDecoration(
                         hintText: "Email Address",
                       ),
                       onChanged: (String value) {
-                        /*setState(() {
-                          Provider.of<LoginProcess>(context, listen: false)
+                        setState(() {
+                          Provider.of<LoginController>(context, listen: false)
                               .email = value;
-                          _email = value;
-                        });*/
+                        });
                       },
                     ),
                   ),
                   Expanded(
                       flex: 12,
                       child: TextFormField(
-                          /*validator: (value) =>
-                              Provider.of<LoginProcess>(context, listen: false)
-                                  .validatePassword(),*/
+                          validator: (value) => Provider.of<LoginController>(
+                                  context,
+                                  listen: false)
+                              .validatePassword(),
                           decoration: new InputDecoration(
                             hintText: "Password",
                           ),
                           onChanged: (String value) {
-                            /*setState(() {
-                              Provider.of<LoginProcess>(context, listen: false)
+                            setState(() {
+                              Provider.of<LoginController>(context,
+                                      listen: false)
                                   .password = value;
-                              _password = value;
-                            });*/
+                            });
                           })),
                   Expanded(
                       flex: 14,
@@ -116,7 +116,21 @@ class _LoginViewState extends State<LoginView> {
                               color: Colors.white,
                               fontSize: context.dynamicWidth(0.035)),
                         ),
-                        onTap: () {} /*_submitButtonOnTap(context)*/,
+                        onTap: () async {
+                          bool result = await Provider.of<LoginController>(
+                                  context,
+                                  listen: false)
+                              .login();
+                          print("DEBUG: Auth result: $result");
+                          if (!result) {
+                            Flushbar(
+                              backgroundColor: Colors.red,
+                              title: "Oops..",
+                              message: "Invalid login",
+                              duration: Duration(seconds: 3),
+                            )..show(context);
+                          }
+                        } /*_submitButtonOnTap(context)*/,
                       ))),
                   Expanded(
                       flex: 12,

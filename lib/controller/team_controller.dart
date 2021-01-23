@@ -1,20 +1,33 @@
+import 'package:flutter/material.dart';
 import 'package:online_team_management/model/Team.dart';
 import 'package:online_team_management/model/User.dart';
+import 'package:online_team_management/service/auth_service.dart';
 import 'package:online_team_management/service/team_service.dart';
+import 'package:online_team_management/service/user_service.dart';
 
-class TeamController {
+class TeamController with ChangeNotifier {
   String teamId;
   String managerId;
   List<User> members;
   String teamName;
 
-  Future<String> createTeam() async {
+  Future<bool> createTeam() async {
     Team team = new Team(
         teamId: teamId,
         managerId: managerId,
         members: members,
         teamName: teamName);
-    return TeamService().createTeam(team);
+    try {
+      String createdTeamId = await TeamService().createTeam(team);
+      User user = await AuthService().currentUser();
+      user.membership.add(createdTeamId);
+      await UserService().updateUser(user);
+      await TeamService().addMemberToTeam(createdTeamId, user);
+      return true;
+    } catch (e) {
+      print("DEBUG: Error TeamController createTeam : $e ");
+      return false;
+    }
   }
 
   Future<bool> updateTeamName(String teamId, String givenName) {
