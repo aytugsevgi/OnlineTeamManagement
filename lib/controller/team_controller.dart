@@ -22,10 +22,10 @@ class TeamController {
   }
 
   Future<String> addMemberToTeam(String teamId, User user) async {
-    TeamService().addMemberToTeam(teamId, user);
+    return TeamService().addMemberToTeam(teamId, user);
   }
 
   Future<String> deleteMemberFromTeam(String teamId, String userId) async {
-    TeamService().deleteMemberFromTeam(teamId, userId);
+    return TeamService().deleteMemberFromTeam(teamId, userId);
   }
 }
