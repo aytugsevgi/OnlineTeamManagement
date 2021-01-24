@@ -46,8 +46,7 @@ class AuthService {
     FirebaseUser currentUser = await firebaseAuth.currentUser();
 
     if (currentUser != null) {
-      User user = await UserService().searchUser(currentUser.uid);
-      return user.userId;
+      return currentUser.uid;
     }
     return null;
   }

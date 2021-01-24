@@ -6,6 +6,7 @@ import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/service/auth_service.dart';
 import 'package:online_team_management/service/team_service.dart';
 import 'package:online_team_management/service/user_service.dart';
+import 'package:uuid/uuid.dart';
 
 class TeamController with ChangeNotifier {
   String teamId;
@@ -16,12 +17,23 @@ class TeamController with ChangeNotifier {
   User _user;
   String _createdTeamName = "";
   List<String> _createdTeamMembers = [];
+  bool _isCreatedTeamLoading = false;
+
+  get isCreatedTeamLoading => _isCreatedTeamLoading;
+
+  set isCreatedTeamLoading(bool value) {
+    _isCreatedTeamLoading = value;
+    notifyListeners();
+  }
+
   get createdTeamMembers => _createdTeamMembers;
   void addCreatedTeamMember(User value) {
     bool isAlreadyExist = false;
+
     for (String u in _createdTeamMembers) {
       if (u == value.userId) {
         isAlreadyExist = true;
+        _user = null;
         break;
       }
     }
@@ -29,8 +41,8 @@ class TeamController with ChangeNotifier {
     if (!isAlreadyExist) {
       _createdTeamMembers.add(value.userId);
       _user = null;
-      notifyListeners();
     }
+    notifyListeners();
   }
 
   void clearCreatedTeamMember() {
@@ -60,27 +72,53 @@ class TeamController with ChangeNotifier {
     List<DocumentSnapshot> _documents =
         await UserService().searchUserFromEmail(searchText);
     if (_documents.isNotEmpty) {
-      user = User.fromJson(_documents[0].data);
+      _user = User.fromJson(_documents[0].data);
+      String currentUserId = await AuthService().currentUserId();
+      print("DEBUG: CurrentUserId: $currentUserId");
+      print("DEBUG: User Id: ${_user.userId}");
+      if (currentUserId == _user.userId) {
+        _user = null;
+      }
     } else {
-      user = null;
+      _user = null;
     }
+    notifyListeners();
   }
 
   Future<bool> createTeam() async {
-    String userId = await AuthService().currentUserId();
-    Team team = new Team(
-        teamId: teamId,
-        managerId: userId,
-        members: members,
-        teamName: teamName);
+    isCreatedTeamLoading = true;
+    var uuid = Uuid();
+    String id = uuid.v1();
+
     try {
-      String createdTeamId = await TeamService().createTeam(team);
-      User user = await AuthService().currentUser();
-      user.membership.add(createdTeamId);
-      await UserService().updateUser(user);
+      String userId = await AuthService().currentUserId();
+      print(userId);
+      Team team = new Team(
+          teamId: id,
+          managerId: userId,
+          members: createdTeamMembers,
+          tasks: [],
+          teamName: createdTeamName);
+      await TeamService().createTeam(team);
+      User currentUser = await AuthService().currentUser();
+      currentUser.membership.add(team.teamId);
+
+      await UserService().updateUser(currentUser);
+      for (String userId in team.members) {
+        User member = await UserService().searchUser(userId);
+        member.membership.add(team.teamId);
+        await UserService().updateUser(member);
+      }
+      _createdTeamName = "";
+      _createdTeamMembers = [];
+      _user = null;
+      _searchText = "";
+
+      isCreatedTeamLoading = false;
       return true;
     } catch (e) {
       print("DEBUG: Error TeamController createTeam : $e ");
+      isCreatedTeamLoading = false;
       return false;
     }
   }

@@ -22,13 +22,7 @@ class UserService {
       await Firestore.instance
           .collection('users')
           .document(user.userId)
-          .setData({
-        'firstName': user.firstName,
-        'lastName': user.lastName,
-        'email': user.email,
-        'membership': user.membership,
-        'isPremium': user.isPremium
-      });
+          .setData(user.toJson());
       return true;
     } catch (e) {
       print("DEBUG: Error UserService updateUser: $e");

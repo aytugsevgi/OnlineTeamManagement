@@ -125,7 +125,13 @@ class CreateTeamView extends StatelessWidget {
                   child: Align(
                     alignment: Alignment(0.94, 0.6),
                     child: FloatingActionButton.extended(
-                        onPressed: () {}, label: Text("Create")),
+                        onPressed: () async {
+                          await Provider.of<TeamController>(context,
+                                  listen: false)
+                              .createTeam();
+                          Navigator.pop(context);
+                        },
+                        label: Text("Create")),
                   ),
                 ),
               ],

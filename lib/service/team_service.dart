@@ -5,14 +5,14 @@ import 'package:online_team_management/model/User.dart';
 class TeamService {
   Firestore _firestore = Firestore.instance;
 
-  Future<String> createTeam(Team team) async {
+  Future<void> createTeam(Team team) async {
     try {
-      DocumentReference createdTeam =
-          await _firestore.collection("teams").add(team.toJson());
-      return createdTeam.documentID;
+      await _firestore
+          .collection("teams")
+          .document(team.teamId)
+          .setData(team.toJson());
     } catch (e) {
       print("DEBUG: team couldn't create $e");
-      return null;
     }
   }
 
