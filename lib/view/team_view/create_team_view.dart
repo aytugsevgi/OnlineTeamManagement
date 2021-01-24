@@ -123,7 +123,7 @@ class CreateTeamView extends StatelessWidget {
                 Expanded(
                   flex: 22,
                   child: Align(
-                    alignment: Alignment(0.94, 0.6),
+                    alignment: Alignment(0.90, 0.3),
                     child: FloatingActionButton.extended(
                         onPressed: () async {
                           await Provider.of<TeamController>(context,
