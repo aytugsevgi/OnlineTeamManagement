@@ -31,7 +31,7 @@ final ThemeData themeLight = ThemeData(
   hintColor: Color(0x8a000000),
   errorColor: Color(0xffd32f2f),
   floatingActionButtonTheme: FloatingActionButtonThemeData(
-    backgroundColor: Color(0xFFD93634),
+    backgroundColor: Color(0xff353b48),
   ),
   bottomAppBarTheme: BottomAppBarTheme(),
   appBarTheme: AppBarTheme(

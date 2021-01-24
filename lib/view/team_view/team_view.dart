@@ -1,3 +1,4 @@
+import 'package:awesome_page_transitions/awesome_page_transitions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_team_management/util/extension.dart';
@@ -9,30 +10,6 @@ class TeamView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: context.themeData.primaryColorLight,
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => CreateTeamView(),
-            ),
-          );
-        },
-        label: Row(
-          children: [
-            Icon(Icons.add),
-            SizedBox(
-              width: 4,
-            ),
-            Text(
-              "Create Team",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: context.themeData.primaryColorLight,
-              ),
-            ),
-          ],
-        ),
-      ),
       appBar: AppBar(
         elevation: 0,
         centerTitle: false,
@@ -44,6 +21,28 @@ class TeamView extends StatelessWidget {
               fontSize: context.dynamicWidth(0.05)),
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+          onPressed: () {
+            Navigator.push(
+                context,
+                AwesomePageRoute(
+                    transitionDuration: Duration(milliseconds: 400),
+                    exitPage: TeamView(),
+                    enterPage: CreateTeamView(),
+                    transition: CubeTransition()));
+          },
+          label: Row(
+            children: [
+              Text(
+                "Create Team",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                    color: context.themeData.primaryColorLight,
+                    fontSize: context.dynamicWidth(0.04)),
+              ),
+              Icon(Icons.arrow_right),
+            ],
+          )),
       body: Column(
         children: <Widget>[
           Spacer(flex: 2),
