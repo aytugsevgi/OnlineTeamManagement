@@ -47,4 +47,22 @@ class UserService {
       return null;
     }
   }
+
+  Future<List<DocumentSnapshot>> searchUserFromEmail(String searchText) async {
+    try {
+      List<DocumentSnapshot> documentList = (await Firestore.instance
+              .collection("users")
+              .where("email", isEqualTo: searchText)
+              .getDocuments())
+          .documents;
+
+      int length = documentList.length;
+
+      print("DEBUG: length of users $length");
+
+      return documentList;
+    } catch (e) {
+      return null;
+    }
+  }
 }

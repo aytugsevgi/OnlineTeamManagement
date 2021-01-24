@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:online_team_management/model/Team.dart';
 import 'package:online_team_management/model/User.dart';
@@ -25,7 +26,10 @@ class TeamController with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> searchUserFromEmail() {}
+  Future<List<DocumentSnapshot>> searchUserFromEmail() {
+    UserService().searchUserFromEmail(searchText);
+  }
+
   Future<bool> createTeam() async {
     Team team = new Team(
         teamId: teamId,
