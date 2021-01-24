@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:online_team_management/controller/home_controller.dart';
 import 'package:online_team_management/util/extension.dart';
+import 'package:online_team_management/view/auth_view/login_view.dart';
+import 'package:online_team_management/widget/loading_view.dart';
 import 'package:online_team_management/widget/submit_button.dart';
+import 'package:provider/provider.dart';
 
 class SettingsView extends StatelessWidget {
   @override
@@ -58,7 +62,18 @@ class SettingsView extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(left: 25.0),
                 child: SubmitButton(
-                  onTap: () {},
+                  onTap: () async {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => LoadingView()));
+                    bool isSuccess = await Provider.of<HomeController>(context,
+                            listen: false)
+                        .signOut();
+                    Navigator.pop(context);
+                    if (isSuccess) {
+                      Navigator.pushReplacement(context,
+                          MaterialPageRoute(builder: (context) => LoginView()));
+                    }
+                  },
                   colors: [
                     context.themeData.primaryColorLight,
                     context.themeData.primaryColorLight

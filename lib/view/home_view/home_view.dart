@@ -148,33 +148,6 @@ class HomeView extends StatelessWidget {
           ),
         ));
   }
-
-  AppBar _appBar(BuildContext context, User user) {
-    return AppBar(
-      elevation: 0,
-      centerTitle: false,
-      actions: <Widget>[
-        IconButton(
-            highlightColor: Colors.transparent,
-            splashColor: Colors.transparent,
-            icon: Icon(CupertinoIcons.settings_solid,
-                size: context.dynamicWidth(0.1),
-                color: context.themeData.primaryColorDark),
-            onPressed: () async {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => LoadingView()));
-              bool isSuccess =
-                  await Provider.of<HomeController>(context, listen: false)
-                      .signOut();
-              Navigator.pop(context);
-              if (isSuccess) {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => LoginView()));
-              }
-            })
-      ],
-    );
-  }
 }
 
 Widget homeTab(BuildContext context, User user) {
