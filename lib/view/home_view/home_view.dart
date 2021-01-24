@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_team_management/controller/home_controller.dart';
+import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/view/auth_view/login_view.dart';
 import 'package:online_team_management/view/home_view/widget/home_card.dart';
@@ -12,82 +13,91 @@ import 'package:provider/provider.dart';
 class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: context.themeData.primaryColorLight,
-        appBar: _appBar(context),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Spacer(flex: 6),
-            Expanded(
-              flex: 5,
-              child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: context.dynamicWidth(0.08)),
-                child: FittedBox(
-                  child: Text(
-                    "Your things to do!",
-                    textAlign: TextAlign.left,
-                    style: TextStyle(
-                        color: context.themeData.primaryColorDark,
-                        fontSize: context.dynamicWidth(0.06)),
-                  ),
-                ),
-              ),
-            ),
-            Spacer(flex: 5),
-            Expanded(
-              flex: 60,
-              child: DefaultTabController(
-                length: 2,
-                child: Column(
-                  children: <Widget>[
-                    Padding(
+    return FutureBuilder<User>(
+        future:
+            Provider.of<HomeController>(context, listen: false).currentUser(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Material(color: Colors.white, child: LoadingView());
+          }
+          return Scaffold(
+              backgroundColor: context.themeData.primaryColorLight,
+              appBar: _appBar(context, snapshot.data),
+              body: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Spacer(flex: 6),
+                  Expanded(
+                    flex: 5,
+                    child: Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: context.dynamicWidth(0.08)),
-                      child: TabBar(
-                        indicatorColor: context.themeData.accentColor,
-                        indicatorWeight: 1,
-                        unselectedLabelStyle: TextStyle(
-                            color: context.themeData.accentColor,
-                            fontWeight: FontWeight.w400),
-                        labelStyle: TextStyle(
-                            color: context.themeData.accentColor,
-                            fontWeight: FontWeight.w700),
-                        labelColor: context.themeData.accentColor,
-                        unselectedLabelColor:
-                            context.themeData.primaryColorDark.withOpacity(0.6),
-                        tabs: [
-                          Tab(
-                            text: "Home",
+                      child: FittedBox(
+                        child: Text(
+                          "Your things to do!",
+                          textAlign: TextAlign.left,
+                          style: TextStyle(
+                              color: context.themeData.primaryColorDark,
+                              fontSize: context.dynamicWidth(0.06)),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Spacer(flex: 5),
+                  Expanded(
+                    flex: 60,
+                    child: DefaultTabController(
+                      length: 2,
+                      child: Column(
+                        children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: context.dynamicWidth(0.08)),
+                            child: TabBar(
+                              indicatorColor: context.themeData.accentColor,
+                              indicatorWeight: 1,
+                              unselectedLabelStyle: TextStyle(
+                                  color: context.themeData.accentColor,
+                                  fontWeight: FontWeight.w400),
+                              labelStyle: TextStyle(
+                                  color: context.themeData.accentColor,
+                                  fontWeight: FontWeight.w700),
+                              labelColor: context.themeData.accentColor,
+                              unselectedLabelColor: context
+                                  .themeData.primaryColorDark
+                                  .withOpacity(0.6),
+                              tabs: [
+                                Tab(
+                                  text: "Home",
+                                ),
+                                Tab(text: "Repositories"),
+                              ],
+                            ),
                           ),
-                          Tab(text: "Repositories"),
+                          Expanded(
+                              flex: 63,
+                              child: TabBarView(
+                                children: [
+                                  homeTab(context, snapshot.data),
+                                  repoTab(),
+                                ],
+                              ))
                         ],
                       ),
                     ),
-                    Expanded(
-                        flex: 63,
-                        child: TabBarView(
-                          children: [
-                            homeTab(context),
-                            repoTab(),
-                          ],
-                        ))
-                  ],
-                ),
-              ),
-            ),
-            Spacer(flex: 13),
-          ],
-        ));
+                  ),
+                  Spacer(flex: 13),
+                ],
+              ));
+        });
   }
 
-  AppBar _appBar(BuildContext context) {
+  AppBar _appBar(BuildContext context, User user) {
     return AppBar(
       elevation: 0,
       centerTitle: false,
       title: Text(
-        "Hi, Sıla",
+        "Hi, ${user.firstName}",
         textAlign: TextAlign.center,
         style: TextStyle(
             color: context.themeData.primaryColorDark,
@@ -117,7 +127,7 @@ class HomeView extends StatelessWidget {
   }
 }
 
-Widget homeTab(BuildContext context) {
+Widget homeTab(BuildContext context, User user) {
   return Column(
     children: <Widget>[
       Spacer(flex: 10),
@@ -139,7 +149,7 @@ Widget homeTab(BuildContext context) {
                     ],
                     icon: CupertinoIcons.group_solid,
                     title: "Team",
-                    subtitle: "5 teams",
+                    subtitle: "${user.membership.length} teams",
                     onTap: () {
                       Navigator.of(context).push(
                         FadeRoute(
@@ -160,7 +170,7 @@ Widget homeTab(BuildContext context) {
                     ],
                     icon: CupertinoIcons.bookmark_solid,
                     title: "Task",
-                    subtitle: "2 tasks",
+                    subtitle: "See your tasks",
                   ),
                 ),
                 Spacer(flex: 2),

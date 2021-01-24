@@ -8,6 +8,14 @@ class TeamDetailView extends StatelessWidget {
       backgroundColor: context.themeData.primaryColorLight,
       appBar: AppBar(
         elevation: 0,
+        centerTitle: false,
+        title: Text(
+          "Just do it",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              color: context.themeData.primaryColorDark,
+              fontSize: context.dynamicWidth(0.05)),
+        ),
       ),
       body: Column(
         children: [],

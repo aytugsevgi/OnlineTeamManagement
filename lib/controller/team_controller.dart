@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:online_team_management/model/Team.dart';
 import 'package:online_team_management/model/User.dart';
+
 import 'package:online_team_management/service/auth_service.dart';
 import 'package:online_team_management/service/team_service.dart';
 import 'package:online_team_management/service/user_service.dart';
@@ -10,7 +11,21 @@ class TeamController with ChangeNotifier {
   String managerId;
   List<User> members;
   String teamName;
+  String _searchText = "";
+  User _user;
+  get searchText => _searchText;
+  set searchText(String value) {
+    _searchText = value;
+    notifyListeners();
+  }
 
+  get user => _user;
+  set user(User value) {
+    _user = value;
+    notifyListeners();
+  }
+
+  Future<void> searchUserFromEmail() {}
   Future<bool> createTeam() async {
     Team team = new Team(
         teamId: teamId,
