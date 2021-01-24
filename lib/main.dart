@@ -5,6 +5,7 @@ import 'package:online_team_management/controller/sign_up_controller.dart';
 import 'package:online_team_management/theme/theme.dart';
 import 'package:online_team_management/view/auth_view/login_view.dart';
 import 'package:online_team_management/view/home_view/home_view.dart';
+import 'package:online_team_management/view/task_view/create_task.dart';
 import "package:provider/provider.dart";
 
 main() {

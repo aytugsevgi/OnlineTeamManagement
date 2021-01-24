@@ -87,7 +87,7 @@ class HomeView extends StatelessWidget {
       elevation: 0,
       centerTitle: false,
       title: Text(
-        "Hi, Ceren",
+        "Hi, Sıla",
         textAlign: TextAlign.center,
         style: TextStyle(
             color: context.themeData.primaryColorDark,
