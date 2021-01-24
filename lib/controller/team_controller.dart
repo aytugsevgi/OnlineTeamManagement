@@ -33,7 +33,7 @@ class TeamController with ChangeNotifier {
   Future<bool> createTeam() async {
     Team team = new Team(
         teamId: teamId,
-        managerId: managerId,
+        managerId: AuthService().currentUserId().toString(),
         members: members,
         teamName: teamName);
     try {
