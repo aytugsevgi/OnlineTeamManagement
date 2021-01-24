@@ -10,16 +10,27 @@ import 'package:online_team_management/service/user_service.dart';
 class TeamController with ChangeNotifier {
   String teamId;
   String managerId;
-  List<User> members;
+  List<String> members;
   String teamName;
   String _searchText = "";
   User _user;
   String _createdTeamName = "";
-  List<User> _createdTeamMembers = [];
+  List<String> _createdTeamMembers = [];
   get createdTeamMembers => _createdTeamMembers;
-  void addCreatedTeamMember(User user) {
-    _createdTeamMembers.add(user);
-    notifyListeners();
+  void addCreatedTeamMember(User value) {
+    bool isAlreadyExist = false;
+    for (String u in _createdTeamMembers) {
+      if (u == value.userId) {
+        isAlreadyExist = true;
+        break;
+      }
+    }
+
+    if (!isAlreadyExist) {
+      _createdTeamMembers.add(value.userId);
+      _user = null;
+      notifyListeners();
+    }
   }
 
   void clearCreatedTeamMember() {
@@ -48,7 +59,11 @@ class TeamController with ChangeNotifier {
   Future<void> searchUserFromEmail() async {
     List<DocumentSnapshot> _documents =
         await UserService().searchUserFromEmail(searchText);
-    user = User.fromJson(_documents[0].data);
+    if (_documents.isNotEmpty) {
+      user = User.fromJson(_documents[0].data);
+    } else {
+      user = null;
+    }
   }
 
   Future<bool> createTeam() async {
@@ -63,7 +78,6 @@ class TeamController with ChangeNotifier {
       User user = await AuthService().currentUser();
       user.membership.add(createdTeamId);
       await UserService().updateUser(user);
-      await TeamService().addMemberToTeam(createdTeamId, user);
       return true;
     } catch (e) {
       print("DEBUG: Error TeamController createTeam : $e ");
@@ -76,7 +90,7 @@ class TeamController with ChangeNotifier {
   }
 
   Future<bool> addMemberToTeam(String teamId, User user) async {
-    return TeamService().addMemberToTeam(teamId, user);
+    return TeamService().addMemberToTeam(teamId, user.userId);
   }
 
   Future<bool> deleteMemberFromTeam(String teamId, String userId) async {

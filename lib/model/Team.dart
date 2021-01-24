@@ -4,14 +4,14 @@ import 'package:online_team_management/model/User.dart';
 class Team {
   String _teamId;
   String _managerId;
-  List<User> _members;
+  List<String> _members;
   String _teamName;
   List<String> _tasks;
 
   Team(
       {String teamId,
       String managerId,
-      List<User> members,
+      List<String> members,
       String teamName,
       List<String> tasks}) {
     this._teamId = teamId;
@@ -25,8 +25,8 @@ class Team {
   set teamId(String teamId) => _teamId = teamId;
   String get managerId => _managerId;
   set managerId(String managerId) => _managerId = managerId;
-  List<User> get members => _members;
-  set members(List<User> members) => _members = members;
+  List<String> get members => _members;
+  set members(List<String> members) => _members = members;
   String get teamName => _teamName;
   set teamName(String teamName) => _teamName = teamName;
   List<String> get tasks => _tasks;

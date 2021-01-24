@@ -11,8 +11,9 @@ class CreateTeamView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {}, label: Text("Create")),
+        backgroundColor: context.themeData.primaryColorLight,
+        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomPadding: false,
         appBar: AppBar(
           elevation: 0,
           centerTitle: false,
@@ -24,50 +25,111 @@ class CreateTeamView extends StatelessWidget {
                 fontSize: context.dynamicWidth(0.05)),
           ),
         ),
-        body: Container(
-          width: double.infinity,
-          height: double.infinity,
-          child: Column(
-            children: [
-              Spacer(
-                flex: 2,
-              ),
-              SizedBox(
-                  height: context.dynamicHeight(0.21),
-                  width: context.dynamicWidth(0.6),
-                  child: TeamCard(
-                    title: Provider.of<TeamController>(context, listen: true)
-                            .createdTeamName ??
-                        "",
-                    countOfMembers:
-                        Provider.of<TeamController>(context, listen: true)
+        body: SingleChildScrollView(
+          physics: ScrollPhysics(parent: NeverScrollableScrollPhysics()),
+          child: SizedBox(
+            height: context.dynamicHeight(0.90),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Spacer(
+                  flex: 2,
+                ),
+                Expanded(
+                  flex: 30,
+                  child: Center(
+                    child: SizedBox(
+                      width: context.dynamicWidth(0.8),
+                      child: TeamCard(
+                        title: Provider.of<TeamController>(context,
+                                        listen: true)
+                                    .createdTeamName ==
+                                ""
+                            ? "Team Name"
+                            : Provider.of<TeamController>(context, listen: true)
+                                .createdTeamName,
+                        countOfMembers:
+                            Provider.of<TeamController>(context, listen: true)
                                 .createdTeamMembers
                                 .length
-                                .toString() ??
-                            "0",
-                    interactive: false,
-                  )),
-              Expanded(
-                flex: 15,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: context.dynamicWidth(0.1)),
-                  child: TextFormField(
-                      decoration: new InputDecoration(
-                        hintText: "Team Name",
+                                .toString(),
+                        interactive: false,
                       ),
-                      onChanged: (String value) {}),
+                    ),
+                  ),
                 ),
-              ),
-              Spacer(flex: 15),
-              Expanded(flex: 15, child: searchField(context)),
-              Spacer(flex: 5),
-              Expanded(
-                flex: 12,
-                child: getSearchedUser(context),
-              ),
-              Spacer(flex: 28),
-            ],
+                Spacer(
+                  flex: 2,
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: context.dynamicWidth(0.05),
+                    ),
+                    child: FittedBox(
+                      child: Text(
+                        "1. Add name to your team",
+                        style: TextStyle(
+                            color: context.themeData.primaryColorDark,
+                            fontSize: context.dynamicWidth(0.06)),
+                      ),
+                    ),
+                  ),
+                ),
+                Spacer(
+                  flex: 2,
+                ),
+                Expanded(
+                  flex: 15,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: context.dynamicWidth(0.1)),
+                    child: TextFormField(
+                        decoration: new InputDecoration(
+                          hintText: "Team Name",
+                        ),
+                        onChanged: (String value) {
+                          Provider.of<TeamController>(context, listen: false)
+                              .createdTeamName = value;
+                        }),
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: context.dynamicWidth(0.05),
+                    ),
+                    child: FittedBox(
+                      child: Text(
+                        "2. Add members to your team",
+                        style: TextStyle(
+                            color: context.themeData.primaryColorDark,
+                            fontSize: context.dynamicWidth(0.06)),
+                      ),
+                    ),
+                  ),
+                ),
+                Spacer(
+                  flex: 2,
+                ),
+                Expanded(flex: 10, child: searchField(context)),
+                Spacer(flex: 2),
+                Expanded(
+                  flex: 14,
+                  child: getSearchedUser(context),
+                ),
+                Expanded(
+                  flex: 22,
+                  child: Align(
+                    alignment: Alignment(0.94, 0.6),
+                    child: FloatingActionButton.extended(
+                        onPressed: () {}, label: Text("Create")),
+                  ),
+                ),
+              ],
+            ),
           ),
         ));
   }
@@ -77,19 +139,29 @@ class CreateTeamView extends StatelessWidget {
     if (user == null) {
       return SizedBox.shrink();
     }
-    return UserCard(user: user, onTap: () {});
+    return UserCard(
+        user: user,
+        onTap: () {
+          Provider.of<TeamController>(context, listen: false)
+              .addCreatedTeamMember(user);
+        });
   }
 
   Widget searchField(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: context.dynamicWidth(0.1)),
       child: TextFormField(
+        keyboardType: TextInputType.emailAddress,
+        onFieldSubmitted: (value) {
+          Provider.of<TeamController>(context, listen: false)
+              .searchUserFromEmail();
+        },
         onChanged: (value) {
           Provider.of<TeamController>(context, listen: false).searchText =
               value;
         },
         decoration: InputDecoration(
-          hintText: "Search",
+          hintText: "Search member for adding team",
           hintStyle: context.themeData.textTheme.headline4
               .copyWith(color: context.themeData.primaryColorDark),
           suffixIcon: Container(

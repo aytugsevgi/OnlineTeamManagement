@@ -29,14 +29,14 @@ class TeamService {
     }
   }
 
-  Future<bool> addMemberToTeam(String teamId, User user) async {
+  Future<bool> addMemberToTeam(String teamId, String userId) async {
     try {
       DocumentSnapshot foundTeam =
           await _firestore.collection("teams").document(teamId).get();
 
       Map<String, dynamic> temp = foundTeam.data;
       Team team = Team.fromJson(temp);
-      team.members.add(user);
+      team.members.add(userId);
 
       await Firestore.instance
           .collection('teams')

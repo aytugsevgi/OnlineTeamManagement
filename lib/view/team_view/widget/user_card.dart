@@ -26,23 +26,22 @@ class UserCard extends StatelessWidget {
               begin: Alignment.bottomRight,
               end: Alignment.topLeft,
               colors: [
-                Color(0xFF9EA8FB),
-                Color(0xFF3F51EB),
-                Color(0xFF3F51EB),
+                context.themeData.primaryColorLight,
+                context.themeData.primaryColor,
+                context.themeData.primaryColor,
+                context.themeData.primaryColor,
               ],
             ),
           ),
           child: ListTile(
             leading:
-                Icon(Icons.person, color: context.themeData.primaryColorLight),
+                Icon(Icons.person, color: context.themeData.primaryColorDark),
             title: Text("${user.firstName} ${user.lastName}",
-                style: TextStyle(color: context.themeData.primaryColorLight)),
+                style: TextStyle(color: context.themeData.primaryColorDark)),
             subtitle: Text("${user.email}",
-                style: TextStyle(color: context.themeData.primaryColorLight)),
+                style: TextStyle(color: context.themeData.primaryColorDark)),
             trailing: IconButton(
-                icon:
-                    Icon(Icons.add, color: context.themeData.primaryColorLight),
-                onPressed: onTap),
+                icon: Icon(Icons.add, color: Colors.green), onPressed: onTap),
           )),
     );
   }
