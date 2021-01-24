@@ -1,9 +1,11 @@
+import 'package:awesome_page_transitions/awesome_page_transitions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_team_management/controller/home_controller.dart';
 import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/view/auth_view/login_view.dart';
+import 'package:online_team_management/view/chat_view/chat_view.dart';
 import 'package:online_team_management/view/home_view/widget/home_card.dart';
 import 'package:online_team_management/view/team_view/team_view.dart';
 import 'package:online_team_management/widget/fade_route.dart';
@@ -191,6 +193,9 @@ Widget homeTab(BuildContext context, User user) {
                 Expanded(
                   flex: 43,
                   child: HomeCard(
+                    onTap: () {
+                      Navigator.push(context, FadeRoute(page: ChatView()));
+                    },
                     colors: [
                       Color(0xFFE59596),
                       Color(0xFFD93634),

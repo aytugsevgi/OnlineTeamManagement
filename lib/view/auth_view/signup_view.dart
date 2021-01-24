@@ -214,6 +214,7 @@ class SignupView extends StatelessWidget {
         context, TransparentRoute(builder: (context) => LoadingView()));
     bool result =
         await Provider.of<SignUpController>(context, listen: false).signUp();
+    Navigator.pop(context);
     if (result) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(

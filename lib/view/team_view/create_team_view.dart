@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_team_management/controller/team_controller.dart';
+import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/util/extension.dart';
+import 'package:online_team_management/view/team_view/widget/team_card.dart';
+import 'package:online_team_management/view/team_view/widget/user_card.dart';
 import 'package:provider/provider.dart';
 
 class CreateTeamView extends StatelessWidget {
@@ -21,36 +24,60 @@ class CreateTeamView extends StatelessWidget {
                 fontSize: context.dynamicWidth(0.05)),
           ),
         ),
-        body: Column(
-          children: [
-            Spacer(
-              flex: 10,
-            ),
-            Expanded(
-              flex: 15,
-              child: Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: context.dynamicWidth(0.1)),
-                child: TextFormField(
-                    decoration: new InputDecoration(
-                      hintText: "Team Name",
-                    ),
-                    onChanged: (String value) {}),
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          child: Column(
+            children: [
+              Spacer(
+                flex: 2,
               ),
-            ),
-            Spacer(flex: 15),
-            Expanded(flex: 15, child: searchField(context)),
-            Expanded(
-              flex: 45,
-              child: Container(
-                  child: Center(
-                      child: Text(
-                          Provider.of<TeamController>(context, listen: true)
-                              .searchText,
-                          style: TextStyle(color: Colors.black)))),
-            )
-          ],
+              SizedBox(
+                  height: context.dynamicHeight(0.21),
+                  width: context.dynamicWidth(0.6),
+                  child: TeamCard(
+                    title: Provider.of<TeamController>(context, listen: true)
+                            .createdTeamName ??
+                        "",
+                    countOfMembers:
+                        Provider.of<TeamController>(context, listen: true)
+                                .createdTeamMembers
+                                .length
+                                .toString() ??
+                            "0",
+                    interactive: false,
+                  )),
+              Expanded(
+                flex: 15,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: context.dynamicWidth(0.1)),
+                  child: TextFormField(
+                      decoration: new InputDecoration(
+                        hintText: "Team Name",
+                      ),
+                      onChanged: (String value) {}),
+                ),
+              ),
+              Spacer(flex: 15),
+              Expanded(flex: 15, child: searchField(context)),
+              Spacer(flex: 5),
+              Expanded(
+                flex: 12,
+                child: getSearchedUser(context),
+              ),
+              Spacer(flex: 28),
+            ],
+          ),
         ));
+  }
+
+  Widget getSearchedUser(context) {
+    User user = Provider.of<TeamController>(context, listen: true).user;
+    if (user == null) {
+      return SizedBox.shrink();
+    }
+    return UserCard(user: user, onTap: () {});
   }
 
   Widget searchField(BuildContext context) {

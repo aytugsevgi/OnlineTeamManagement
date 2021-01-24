@@ -14,6 +14,25 @@ class TeamController with ChangeNotifier {
   String teamName;
   String _searchText = "";
   User _user;
+  String _createdTeamName = "";
+  List<User> _createdTeamMembers = [];
+  get createdTeamMembers => _createdTeamMembers;
+  void addCreatedTeamMember(User user) {
+    _createdTeamMembers.add(user);
+    notifyListeners();
+  }
+
+  void clearCreatedTeamMember() {
+    _createdTeamMembers.clear();
+    notifyListeners();
+  }
+
+  get createdTeamName => _createdTeamName;
+  set createdTeamName(String value) {
+    _createdTeamName = value;
+    notifyListeners();
+  }
+
   get searchText => _searchText;
   set searchText(String value) {
     _searchText = value;
@@ -26,14 +45,17 @@ class TeamController with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<List<DocumentSnapshot>> searchUserFromEmail() {
-    UserService().searchUserFromEmail(searchText);
+  Future<void> searchUserFromEmail() async {
+    List<DocumentSnapshot> _documents =
+        await UserService().searchUserFromEmail(searchText);
+    user = User.fromJson(_documents[0].data);
   }
 
   Future<bool> createTeam() async {
+    String userId = await AuthService().currentUserId();
     Team team = new Team(
         teamId: teamId,
-        managerId: AuthService().currentUserId().toString(),
+        managerId: userId,
         members: members,
         teamName: teamName);
     try {
