@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:online_team_management/model/Team.dart';
 import 'package:online_team_management/model/User.dart';
+import 'package:online_team_management/service/auth_service.dart';
 
 class UserService {
   Firestore _firestore = Firestore.instance;
@@ -43,7 +44,26 @@ class UserService {
     }
   }
 
-  Future<List<Team>> getTeams(List<String> memberships) async {}
+  Future<List<Team>> getTeams() async {
+    try {
+      List<Team> foundTeamList = new List();
+
+      List<String> membershipList =
+          (await AuthService().currentUser()).membership;
+
+      for (var x in membershipList) {
+        DocumentSnapshot currentTeam =
+            await _firestore.collection("teams").document(x).get();
+        Map<String, dynamic> temp = currentTeam.data;
+        Team team = Team.fromJson(temp);
+        foundTeamList.add(team);
+        return foundTeamList;
+      }
+    } catch (e) {
+      print("DEBUG: Error couldn't get user's tems $e");
+      return null;
+    }
+  }
 
   Future<List<DocumentSnapshot>> searchUserFromEmail(String searchText) async {
     try {

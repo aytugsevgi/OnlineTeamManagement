@@ -134,4 +134,8 @@ class TeamController with ChangeNotifier {
   Future<bool> deleteMemberFromTeam(String teamId, String userId) async {
     return TeamService().deleteMemberFromTeam(teamId, userId);
   }
+
+  Future<List<Team>> getTeams() async {
+    return UserService().getTeams();
+  }
 }
