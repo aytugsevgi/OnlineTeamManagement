@@ -10,6 +10,8 @@ import 'package:online_team_management/view/chat_view/chat_detail_view.dart';
 import 'package:online_team_management/view/chat_view/chat_view.dart';
 import 'package:online_team_management/view/home_view/widget/home_card.dart';
 import 'package:online_team_management/view/home_view/widget/settings_view.dart';
+import 'package:online_team_management/view/repo_view/repo_view.dart';
+import 'package:online_team_management/view/task_view/task_view.dart';
 import 'package:online_team_management/view/team_view/team_view.dart';
 import 'package:online_team_management/widget/fade_route.dart';
 import 'package:online_team_management/widget/loading_view.dart';
@@ -36,12 +38,12 @@ class HomeView extends StatelessWidget {
             slideWidth: MediaQuery.of(context).size.width * .65,
             openCurve: Curves.fastOutSlowIn,
             closeCurve: Curves.fastOutSlowIn,
-            mainScreen: mainScreen(context, snapshot),
+            mainScreen: mainScreen(context, snapshot.data),
           );
         });
   }
 
-  Scaffold mainScreen(BuildContext context, AsyncSnapshot<User> snapshot) {
+  Scaffold mainScreen(BuildContext context, User user) {
     return Scaffold(
         backgroundColor: context.themeData.primaryColorLight,
         body: SafeArea(
@@ -73,7 +75,7 @@ class HomeView extends StatelessWidget {
                         width: 10,
                       ),
                       Text(
-                        "Hi, ${snapshot.data.firstName}",
+                        "Hi, ${user.firstName}",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             color: context.themeData.primaryColorDark,
@@ -135,15 +137,14 @@ class HomeView extends StatelessWidget {
                           flex: 63,
                           child: TabBarView(
                             children: [
-                              homeTab(context, snapshot.data),
-                              repoTab(),
+                              homeTab(context, user),
+                              RepoView(),
                             ],
                           ))
                     ],
                   ),
                 ),
               ),
-              Spacer(flex: 13),
             ],
           ),
         ));
@@ -194,6 +195,13 @@ Widget homeTab(BuildContext context, User user) {
                     icon: CupertinoIcons.bookmark_solid,
                     title: "Task",
                     subtitle: "See your tasks",
+                    onTap: () {
+                      Navigator.of(context).push(
+                        FadeRoute(
+                          page: TaskView(),
+                        ),
+                      );
+                    },
                   ),
                 ),
                 Spacer(flex: 2),
@@ -244,7 +252,8 @@ Widget homeTab(BuildContext context, User user) {
                 Spacer(flex: 2),
               ],
             ),
-          ))
+          )),
+      Spacer(flex: 20),
     ],
   );
 }

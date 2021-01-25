@@ -50,15 +50,15 @@ class UserService {
 
       List<String> membershipList =
           (await AuthService().currentUser()).membership;
-
+      print(membershipList.length);
       for (var x in membershipList) {
         DocumentSnapshot currentTeam =
             await _firestore.collection("teams").document(x).get();
         Map<String, dynamic> temp = currentTeam.data;
         Team team = Team.fromJson(temp);
         foundTeamList.add(team);
-        return foundTeamList;
       }
+      return foundTeamList;
     } catch (e) {
       print("DEBUG: Error couldn't get user's tems $e");
       return null;

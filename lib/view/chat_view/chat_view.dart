@@ -58,7 +58,7 @@ class ChatView extends StatelessWidget {
         onPressed: () => Navigator.pop(context),
       ),
       title: Text(
-        "Uh, Privacy Is Important",
+        "Promise, I'm Not Looking",
         style: context.themeData.textTheme.headline
             .copyWith(fontSize: 18, color: context.themeData.primaryColorDark),
       ),

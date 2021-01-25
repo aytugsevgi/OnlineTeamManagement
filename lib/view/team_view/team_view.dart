@@ -1,9 +1,12 @@
 import 'package:awesome_page_transitions/awesome_page_transitions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:online_team_management/controller/team_controller.dart';
+import 'package:online_team_management/model/Team.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/view/team_view/create_team_view.dart';
 import 'package:online_team_management/view/team_view/widget/team_card.dart';
+import 'package:provider/provider.dart';
 
 class TeamView extends StatelessWidget {
   @override
@@ -56,34 +59,35 @@ class TeamView extends StatelessWidget {
               padding: EdgeInsets.symmetric(
                 horizontal: context.dynamicWidth(0.06),
               ),
-              child: ListView(
-                children: [
-                  SizedBox(
-                    height: context.dynamicHeight(0.21),
-                    width: context.dynamicWidth(0.6),
-                    child: TeamCard(
-                      title: "Power Puff Girls",
-                      countOfMembers: "10",
-                    ),
-                  ),
-                  SizedBox(
-                    height: context.dynamicHeight(0.21),
-                    width: context.dynamicWidth(0.6),
-                    child: TeamCard(
-                      title: "Star Wars",
-                      countOfMembers: "21",
-                    ),
-                  ),
-                  SizedBox(
-                    height: context.dynamicHeight(0.21),
-                    width: context.dynamicWidth(0.6),
-                    child: TeamCard(
-                      title: "Figth Clup",
-                      countOfMembers: "14",
-                    ),
-                  ),
-                ],
-              ),
+              child: FutureBuilder<List<Team>>(
+                  future: Provider.of<TeamController>(context, listen: false)
+                      .getTeams(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            itemCount: snapshot.data.length,
+                            itemBuilder: (context, index) {
+                              Team _team = snapshot.data[index];
+                              return SizedBox(
+                                height: context.dynamicHeight(0.21),
+                                width: context.dynamicWidth(0.6),
+                                child: TeamCard(
+                                  title: _team.teamName,
+                                  countOfMembers:
+                                      (_team.members.length + 1).toString(),
+                                ),
+                              );
+                            });
+                      }
+                      return SizedBox.shrink();
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: context.themeData.accentColor,
+                      ),
+                    );
+                  }),
             ),
           ),
         ],

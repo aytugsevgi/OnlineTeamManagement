@@ -4,16 +4,16 @@ import 'package:online_team_management/model/User.dart';
 class Team {
   String _teamId;
   String _managerId;
-  List<String> _members;
+  List<dynamic> _members;
   String _teamName;
-  List<String> _tasks;
+  List<dynamic> _tasks;
 
   Team(
       {String teamId,
       String managerId,
-      List<String> members,
+      List<dynamic> members,
       String teamName,
-      List<String> tasks}) {
+      List<dynamic> tasks}) {
     this._teamId = teamId;
     this._managerId = managerId;
     this._members = members;
@@ -25,17 +25,17 @@ class Team {
   set teamId(String teamId) => _teamId = teamId;
   String get managerId => _managerId;
   set managerId(String managerId) => _managerId = managerId;
-  List<String> get members => _members;
-  set members(List<String> members) => _members = members;
+  List<dynamic> get members => _members;
+  set members(List<dynamic> members) => _members = members;
   String get teamName => _teamName;
   set teamName(String teamName) => _teamName = teamName;
-  List<String> get tasks => _tasks;
-  set tasks(List<String> tasks) => _tasks = tasks;
+  List<dynamic> get tasks => _tasks;
+  set tasks(List<dynamic> tasks) => _tasks = tasks;
 
   Team.fromJson(Map<String, dynamic> json) {
     _teamId = json['teamId'];
     _managerId = json['managerId'];
-    _members = json['members'].cast<String>();
+    _members = json['members'];
     _teamName = json['teamName'];
     _tasks = json['tasks'];
   }

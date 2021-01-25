@@ -8,7 +8,17 @@ class TeamCard extends StatelessWidget {
   String title;
   String countOfMembers;
   bool interactive;
-  TeamCard({Key key, this.title, this.countOfMembers, this.interactive = true})
+  List<Color> colors;
+  TeamCard(
+      {Key key,
+      this.title,
+      this.countOfMembers,
+      this.interactive = true,
+      this.colors = const [
+        Color(0xFF3F51EB),
+        Color(0xFF3F51EB),
+        Color(0xFF9EA8FB),
+      ]})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -23,11 +33,10 @@ class TeamCard extends StatelessWidget {
                   horizontal: context.dynamicWidth(0.04)),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
-                  gradient: LinearGradient(colors: [
-                    Color(0xFF3F51EB),
-                    Color(0xFF3F51EB),
-                    Color(0xFF9EA8FB),
-                  ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+                  gradient: LinearGradient(
+                      colors: colors,
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey,
