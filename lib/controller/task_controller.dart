@@ -45,7 +45,7 @@ class TaskController {
     return TaskService().deleteTask(taskId);
   }
 
-  Future<List<Task>> getTeamsTasks() async {
+  Future<List<Task>> getUserTasks() async {
     return UserService().getUserTasks();
   }
 }
