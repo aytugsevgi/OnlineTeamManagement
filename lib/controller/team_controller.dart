@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:online_team_management/model/Task.dart';
 import 'package:online_team_management/model/Team.dart';
 import 'package:online_team_management/model/User.dart';
 
@@ -137,5 +138,9 @@ class TeamController with ChangeNotifier {
 
   Future<List<Team>> getTeams() async {
     return UserService().getTeams();
+  }
+
+  Future<List<Task>> getTeamsTasks(String teamId) async {
+    return TeamService().getTeamTasks(teamId);
   }
 }

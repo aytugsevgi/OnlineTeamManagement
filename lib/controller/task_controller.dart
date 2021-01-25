@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:online_team_management/model/Task.dart';
 import 'package:online_team_management/service/task_service.dart';
+import 'package:online_team_management/service/user_service.dart';
 
 class TaskController {
   String taskId;
@@ -42,5 +43,9 @@ class TaskController {
 
   Future<bool> deleteTask(@required String taskId) async {
     return TaskService().deleteTask(taskId);
+  }
+
+  Future<List<Task>> getTeamsTasks() async {
+    return UserService().getUserTasks();
   }
 }

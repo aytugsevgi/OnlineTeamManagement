@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:online_team_management/model/Task.dart';
 import 'package:online_team_management/model/Team.dart';
 import 'package:online_team_management/model/User.dart';
+import 'package:online_team_management/service/task_service.dart';
+
+import 'auth_service.dart';
 
 class TeamService {
   Firestore _firestore = Firestore.instance;
@@ -77,5 +81,14 @@ class TeamService {
       print("DEBUG: Error deleteMemberFromTeam Service: $e");
       return false;
     }
+  }
+
+  Future<List<Task>> getTeamTasks(String teamId) async {
+    DocumentSnapshot foundTeamsTasks =
+        await _firestore.collection("teams").document("teamId").get();
+    Map<String, dynamic> temp = foundTeamsTasks.data;
+    Team team = Team.fromJson(temp);
+
+    return team.tasks;
   }
 }
