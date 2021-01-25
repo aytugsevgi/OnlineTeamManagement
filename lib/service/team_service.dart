@@ -85,13 +85,17 @@ class TeamService {
   }
 
   Future<List<Task>> getTeamTasks(String teamId) async {
+    List<Task> taskList = new List();
+
     try {
       DocumentSnapshot foundTeamsTasks =
           await _firestore.collection("teams").document("teamId").get();
       Map<String, dynamic> temp = foundTeamsTasks.data;
       Team team = Team.fromJson(temp);
 
-      return team.tasks;
+      for (var x in team.tasks) {
+        taskList.add(await TaskService().searchTask(x));
+      }
     } catch (e) {
       print("DEBUG: Error couldn't get team's tasks!");
       return null;
