@@ -144,7 +144,7 @@ class TeamController with ChangeNotifier {
     return TeamService().getTeamTasks(teamId);
   }
 
-  Future<List<String>> getTeamsUsers(String teamId) async {
+  Future<List<User>> getTeamsUsers(String teamId) async {
     return TeamService().getTeamMembers(teamId);
   }
 }
