@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:online_team_management/model/Team.dart';
 import 'package:online_team_management/model/User.dart';
 
 class UserService {
@@ -41,6 +42,8 @@ class UserService {
       return null;
     }
   }
+
+  Future<List<Team>> getTeams(List<String> memberships) async {}
 
   Future<List<DocumentSnapshot>> searchUserFromEmail(String searchText) async {
     try {
