@@ -5,8 +5,6 @@ import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/service/task_service.dart';
 import 'package:online_team_management/service/user_service.dart';
 
-import 'auth_service.dart';
-
 class TeamService {
   Firestore _firestore = Firestore.instance;
 
@@ -89,13 +87,15 @@ class TeamService {
 
     try {
       DocumentSnapshot foundTeamsTasks =
-          await _firestore.collection("teams").document("teamId").get();
+          await _firestore.collection("teams").document(teamId).get();
       Map<String, dynamic> temp = foundTeamsTasks.data;
+      print("**1");
       Team team = Team.fromJson(temp);
 
       for (var x in team.tasks) {
         taskList.add(await TaskService().searchTask(x));
       }
+      return taskList;
     } catch (e) {
       print("DEBUG: Error couldn't get team's tasks!");
       return null;
@@ -106,9 +106,11 @@ class TeamService {
     List<User> userList = new List();
     try {
       DocumentSnapshot foundTeamsTasks =
-          await _firestore.collection("teams").document("teamId").get();
+          await _firestore.collection("teams").document(teamId).get();
       Map<String, dynamic> temp = foundTeamsTasks.data;
       Team team = Team.fromJson(temp);
+
+      userList.add(await UserService().searchUser(team.managerId));
 
       for (var x in team.members) {
         userList.add(await UserService().searchUser(x));
