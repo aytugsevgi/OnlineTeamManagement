@@ -50,15 +50,18 @@ class UserService {
   Future<List<Team>> getTeams() async {
     try {
       List<Team> foundTeamList = new List();
-
+      print("1");
       List<String> membershipList =
           (await AuthService().currentUser()).membership;
       print(membershipList.length);
       for (var x in membershipList) {
         DocumentSnapshot currentTeam =
             await _firestore.collection("teams").document(x).get();
+        print("2");
         Map<String, dynamic> temp = currentTeam.data;
+        print("3");
         Team team = Team.fromJson(temp);
+        print("4");
         foundTeamList.add(team);
       }
       return foundTeamList;

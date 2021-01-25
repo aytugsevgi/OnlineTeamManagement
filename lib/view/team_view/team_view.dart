@@ -69,13 +69,12 @@ class TeamView extends StatelessWidget {
                             itemCount: snapshot.data.length,
                             itemBuilder: (context, index) {
                               Team _team = snapshot.data[index];
+
                               return SizedBox(
                                 height: context.dynamicHeight(0.21),
                                 width: context.dynamicWidth(0.6),
                                 child: TeamCard(
-                                  title: _team.teamName,
-                                  countOfMembers:
-                                      (_team.members.length + 1).toString(),
+                                  team: _team,
                                 ),
                               );
                             });

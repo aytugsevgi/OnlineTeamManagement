@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_team_management/controller/team_controller.dart';
+import 'package:online_team_management/model/Team.dart';
 import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/view/team_view/widget/team_card.dart';
@@ -10,6 +11,15 @@ import 'package:provider/provider.dart';
 class CreateTeamView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Team team = Team(
+        teamName: Provider.of<TeamController>(context, listen: true)
+                    .createdTeamName ==
+                ""
+            ? "Team Name"
+            : Provider.of<TeamController>(context, listen: true)
+                .createdTeamName,
+        members: Provider.of<TeamController>(context, listen: true)
+            .createdTeamMembers);
     return Scaffold(
         backgroundColor: context.themeData.primaryColorLight,
         resizeToAvoidBottomInset: true,
@@ -41,18 +51,7 @@ class CreateTeamView extends StatelessWidget {
                     child: SizedBox(
                       width: context.dynamicWidth(0.8),
                       child: TeamCard(
-                        title: Provider.of<TeamController>(context,
-                                        listen: true)
-                                    .createdTeamName ==
-                                ""
-                            ? "Team Name"
-                            : Provider.of<TeamController>(context, listen: true)
-                                .createdTeamName,
-                        countOfMembers:
-                            Provider.of<TeamController>(context, listen: true)
-                                .createdTeamMembers
-                                .length
-                                .toString(),
+                        team: team,
                         interactive: false,
                       ),
                     ),

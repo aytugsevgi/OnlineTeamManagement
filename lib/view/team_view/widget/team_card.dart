@@ -1,18 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:online_team_management/model/Team.dart';
 import 'package:online_team_management/theme/theme.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/view/team_view/team_detail_view.dart';
 
 class TeamCard extends StatelessWidget {
-  String title;
-  String countOfMembers;
+  Team team;
   bool interactive;
   List<Color> colors;
   TeamCard(
       {Key key,
-      this.title,
-      this.countOfMembers,
+      this.team,
       this.interactive = true,
       this.colors = const [
         Color(0xFF3F51EB),
@@ -51,7 +50,7 @@ class TeamCard extends StatelessWidget {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => TeamDetailView()));
+                            builder: (context) => TeamDetailView(team: team)));
                   }
                 },
                 child: Column(
@@ -70,7 +69,7 @@ class TeamCard extends StatelessWidget {
                             SizedBox(
                               width: 10,
                             ),
-                            Text("$countOfMembers Members",
+                            Text("${team.members.length + 1} Members",
                                 style: themeLight.textTheme.bodyText1.copyWith(
                                     fontSize: 10,
                                     color: Colors.white,
@@ -83,7 +82,7 @@ class TeamCard extends StatelessWidget {
                     Expanded(
                       flex: 19,
                       child: FittedBox(
-                        child: Text(title,
+                        child: Text(team.teamName,
                             style: themeLight.textTheme.bodyText1.copyWith(
                                 color: Colors.white,
                                 fontWeight: FontWeight.bold)),

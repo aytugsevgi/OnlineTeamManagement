@@ -7,11 +7,13 @@ import 'package:online_team_management/theme/theme.dart';
 import 'package:online_team_management/util/extension.dart';
 
 class TaskCard extends StatelessWidget {
+  int index;
   Task task;
   List<Color> colors;
   bool isDone;
   TaskCard(
       {Key key,
+      this.index,
       this.task,
       this.isDone,
       this.colors = const [

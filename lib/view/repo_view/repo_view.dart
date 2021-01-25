@@ -9,24 +9,29 @@ import 'package:online_team_management/widget/fade_route.dart';
 class RepoView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.of(context).push(FadeRoute(page: TaskDetail()));
-      },
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          Hero(
-            tag: "x",
-            child: Material(
-              child: SizedBox(
-                height: context.dynamicHeight(0.18),
-                width: context.dynamicWidth(1),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: context.dynamicHeight(0.05),
-                  ),
+    return ListView.builder(
+      itemCount: 5,
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return Hero(
+          tag: "$index",
+          child: Material(
+            child: SizedBox(
+              height: context.dynamicHeight(0.18),
+              width: context.dynamicWidth(1),
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: context.dynamicHeight(0.05),
+                ),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(FadeRoute(
+                        page: TaskDetail(
+                      index: index,
+                    )));
+                  },
                   child: TaskCard(
+                    index: index,
                     isDone: true,
                     colors: [
                       Color(0xFF74CCA2),
@@ -42,92 +47,8 @@ class RepoView extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: context.dynamicHeight(0.18),
-            width: context.dynamicWidth(1),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: context.dynamicHeight(0.05),
-              ),
-              child: TaskCard(
-                isDone: true,
-                colors: [
-                  Color(0xFF74CCA2),
-                  Color(0xFF74CCA2),
-                  Color(0xFF9EE8D1),
-                ],
-                task: Task(
-                    content: "Hello",
-                    members: ["1", "2"],
-                    dueDate: Timestamp.now()),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: context.dynamicHeight(0.18),
-            width: context.dynamicWidth(1),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: context.dynamicHeight(0.05),
-              ),
-              child: TaskCard(
-                isDone: true,
-                colors: [
-                  Color(0xFF74CCA2),
-                  Color(0xFF74CCA2),
-                  Color(0xFF9EE8D1),
-                ],
-                task: Task(
-                    content: "Hello",
-                    members: ["1", "2"],
-                    dueDate: Timestamp.now()),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: context.dynamicHeight(0.18),
-            width: context.dynamicWidth(1),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: context.dynamicHeight(0.05),
-              ),
-              child: TaskCard(
-                isDone: true,
-                colors: [
-                  Color(0xFF74CCA2),
-                  Color(0xFF74CCA2),
-                  Color(0xFF9EE8D1),
-                ],
-                task: Task(
-                    content: "Hello",
-                    members: ["1", "2"],
-                    dueDate: Timestamp.now()),
-              ),
-            ),
-          ),
-          SizedBox(
-            height: context.dynamicHeight(0.18),
-            width: context.dynamicWidth(1),
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: context.dynamicHeight(0.05),
-              ),
-              child: TaskCard(
-                isDone: true,
-                colors: [
-                  Color(0xFF74CCA2),
-                  Color(0xFF74CCA2),
-                  Color(0xFF9EE8D1),
-                ],
-                task: Task(
-                    content: "Hello",
-                    members: ["1", "2"],
-                    dueDate: Timestamp.now()),
-              ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

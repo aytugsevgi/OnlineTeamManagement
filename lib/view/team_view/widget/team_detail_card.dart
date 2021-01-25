@@ -12,70 +12,73 @@ class TeamDetailCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.symmetric(
-            vertical: context.dynamicHeight(0.02),
-            horizontal: context.dynamicWidth(0.04)),
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(6),
-            gradient: LinearGradient(colors: [
-              Color(0xFF3F51EB),
-              Color(0xFF3F51EB),
-              Color(0xFF9EA8FB),
-            ], begin: Alignment.topLeft, end: Alignment.bottomRight),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey,
-                spreadRadius: 0.1,
-                blurRadius: 1,
-                offset: Offset(0, -2),
-              ),
-            ]),
-        child: InkWell(
-          onTap: onTap,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Expanded(
-                flex: 30,
-                child: FittedBox(
-                  child: Icon(
-                    icon,
-                    color: Colors.white,
-                  ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+          padding: EdgeInsets.symmetric(
+              vertical: context.dynamicHeight(0.02),
+              horizontal: context.dynamicWidth(0.04)),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(6),
+              gradient: LinearGradient(colors: [
+                Color(0xFF3F51EB),
+                Color(0xFF3F51EB),
+                Color(0xFF9EA8FB),
+              ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey,
+                  spreadRadius: 0.1,
+                  blurRadius: 1,
+                  offset: Offset(0, -2),
                 ),
-              ),
-              Expanded(
-                flex: 50,
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.person,
+              ]),
+          child: InkWell(
+            onTap: onTap,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Expanded(
+                  flex: 30,
+                  child: FittedBox(
+                    child: Icon(
+                      icon,
                       color: Colors.white,
                     ),
-                    FittedBox(
-                      child: Text(name,
-                          style: themeLight.textTheme.bodyText1.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-              Spacer(
-                flex: 30,
-              ),
-              Expanded(
-                flex: 30,
-                child: FittedBox(
-                  child: Text(email,
-                      style: themeLight.textTheme.bodyText1.copyWith(
-                          color: Colors.white, fontWeight: FontWeight.w300)),
+                Expanded(
+                  flex: 50,
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                      FittedBox(
+                        child: Text(name,
+                            style: themeLight.textTheme.bodyText1.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              Spacer(flex: 40),
-            ],
-          ),
-        ));
+                Spacer(
+                  flex: 30,
+                ),
+                Expanded(
+                  flex: 30,
+                  child: FittedBox(
+                    child: Text(email,
+                        style: themeLight.textTheme.bodyText1.copyWith(
+                            color: Colors.white, fontWeight: FontWeight.w300)),
+                  ),
+                ),
+                Spacer(flex: 40),
+              ],
+            ),
+          )),
+    );
   }
 }

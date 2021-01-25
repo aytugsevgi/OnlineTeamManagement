@@ -7,6 +7,8 @@ import 'package:online_team_management/view/task_view/widget/task_card.dart';
 import 'package:online_team_management/view/team_view/widget/user_card.dart';
 
 class TaskDetail extends StatelessWidget {
+  int index;
+  TaskDetail({this.index});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +33,7 @@ class TaskDetail extends StatelessWidget {
                   Expanded(
                     flex: 22,
                     child: Hero(
-                      tag: "x",
+                      tag: "$index",
                       child: Material(
                         child: Center(
                           child: ConstrainedBox(
@@ -56,9 +58,9 @@ class TaskDetail extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Spacer(flex: 2),
+                  Spacer(flex: 3),
                   Expanded(
-                    flex: 6,
+                    flex: 4,
                     child: Padding(
                       padding: EdgeInsets.only(
                         left: context.dynamicWidth(0.05),
@@ -70,7 +72,7 @@ class TaskDetail extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Spacer(flex: 2),
+                  Spacer(flex: 3),
                   Expanded(
                     flex: 13,
                     child: ListView(
