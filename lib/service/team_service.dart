@@ -97,7 +97,7 @@ class TeamService {
     }
   }
 
-  Future<List<User>> getTeamMembers(String teamId) async {
+  Future<List<String>> getTeamMembers(String teamId) async {
     try {
       DocumentSnapshot foundTeamsTasks =
           await _firestore.collection("teams").document("teamId").get();
