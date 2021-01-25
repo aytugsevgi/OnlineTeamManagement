@@ -3,18 +3,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Task {
   String _taskId;
   String _teamId;
-  List<String> _members;
+  List<dynamic> _members;
   String _content;
-  Timestamp _dueDate;
-  Timestamp _createdAt;
+  DateTime _dueDate;
+  DateTime _createdAt;
 
   Task(
       {String taskId,
       String teamId,
-      List<String> members,
+      List<dynamic> members,
       String content,
-      Timestamp dueDate,
-      Timestamp createdAt}) {
+      DateTime dueDate,
+      DateTime createdAt}) {
     this._taskId = taskId;
     this._teamId = teamId;
     this._members = members;
@@ -27,22 +27,28 @@ class Task {
   set taskId(String taskId) => _taskId = taskId;
   String get teamId => _teamId;
   set teamId(String teamId) => _teamId = teamId;
-  List<String> get members => _members;
-  set members(List<String> members) => _members = members;
+  List<dynamic> get members => _members;
+  set members(List<dynamic> members) => _members = members;
   String get content => _content;
   set content(String content) => _content = content;
-  Timestamp get dueDate => _dueDate;
-  set dueDate(Timestamp dueDate) => _dueDate = dueDate;
-  Timestamp get createdAt => _createdAt;
-  set createdAt(Timestamp createdAt) => _createdAt = createdAt;
+  DateTime get dueDate => _dueDate;
+  set dueDate(DateTime dueDate) => _dueDate = dueDate;
+  DateTime get createdAt => _createdAt;
+  set createdAt(DateTime createdAt) => _createdAt = createdAt;
 
   Task.fromJson(Map<String, dynamic> json) {
+    print("x1");
     _taskId = json['taskId'];
+    print("x2");
     _teamId = json['teamId'];
-    _members = json['members'].cast<String>();
+    print("x3");
+    _members = json['members'];
+    print("x4");
     _content = json['content'];
-    _dueDate = json['dueDate'];
-    _createdAt = json['createdAt'];
+    print("x5");
+    _dueDate = json['dueDate'].toDate();
+    print("x6");
+    _createdAt = json['createdAt'].toDate();
   }
 
   Map<String, dynamic> toJson() {
@@ -51,8 +57,8 @@ class Task {
     data['teamId'] = this._teamId;
     data['members'] = this._members;
     data['content'] = this._content;
-    data['dueDate'] = this._dueDate;
-    data['createdAt'] = this._createdAt;
+    data['dueDate'] = Timestamp.fromDate(this._dueDate);
+    data['createdAt'] = Timestamp.fromDate(this._createdAt);
     return data;
   }
 }

@@ -2,18 +2,20 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:online_team_management/model/Task.dart';
 import 'package:online_team_management/model/Team.dart';
+import 'package:online_team_management/service/team_service.dart';
 
 class TaskService {
   Firestore _firestore = Firestore.instance;
 
-  Future<String> addTask(Task task) async {
+  Future<void> addTask(Task task) async {
     try {
-      DocumentReference newTask =
-          await _firestore.collection("tasks").add(task.toJson());
-      return newTask.documentID;
+      await _firestore
+          .collection("tasks")
+          .document(task.taskId)
+          .setData(task.toJson());
+      await TeamService().addTaskToTeam(task.teamId, task);
     } catch (e) {
       print("DEBUG couldn't save $e");
-      return null;
     }
   }
 
@@ -79,6 +81,7 @@ class TaskService {
   Future<Task> searchTask(@required String taskId) async {
     DocumentSnapshot _snapshot =
         await Firestore.instance.collection('tasks').document(taskId).get();
+    print(_snapshot.data);
     Task task = Task.fromJson(_snapshot.data);
     return task;
   }

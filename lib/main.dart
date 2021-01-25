@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:online_team_management/controller/home_controller.dart';
 import 'package:online_team_management/controller/login_controller.dart';
 import 'package:online_team_management/controller/sign_up_controller.dart';
+import 'package:online_team_management/controller/task_controller.dart';
 import 'package:online_team_management/controller/team_controller.dart';
 import 'package:online_team_management/theme/theme.dart';
 import 'package:online_team_management/view/auth_view/login_view.dart';
@@ -16,6 +17,7 @@ main() {
       ChangeNotifierProvider(create: (context) => SignUpController()),
       ChangeNotifierProvider(create: (context) => HomeController()),
       ChangeNotifierProvider(create: (context) => TeamController()),
+      ChangeNotifierProvider(create: (context) => TaskController()),
     ],
     child: MyApp(),
   ));

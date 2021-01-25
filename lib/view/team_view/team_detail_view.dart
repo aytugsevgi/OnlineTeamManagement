@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:online_team_management/controller/task_controller.dart';
 import 'package:online_team_management/controller/team_controller.dart';
 import 'package:online_team_management/model/Task.dart';
 import 'package:online_team_management/model/Team.dart';
@@ -18,11 +19,18 @@ class TeamDetailView extends StatelessWidget {
   TeamDetailView({@required this.team});
   @override
   Widget build(BuildContext context) {
+    List<User> teamMembers = [];
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => CreateTaskView()));
+          Provider.of<TaskController>(context, listen: false).members = [];
+          Provider.of<TaskController>(context, listen: false).content = "";
+          Provider.of<TaskController>(context, listen: false).tempUsers =
+              teamMembers;
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => CreateTaskView(
+                    team: team,
+                  )));
         },
         label: Text(
           "Create Task",
@@ -73,7 +81,7 @@ class TeamDetailView extends StatelessWidget {
                   if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasData) {
                       List<User> users = snapshot.data;
-
+                      teamMembers = users;
                       return ListView.builder(
                         itemCount: users.length,
                         primary: false,
@@ -157,7 +165,7 @@ class TeamDetailView extends StatelessWidget {
                                         task: Task(
                                             content: "Hello",
                                             members: ["1", "2"],
-                                            dueDate: Timestamp.now()),
+                                            dueDate: DateTime.now()),
                                       ),
                                     ),
                                   ),

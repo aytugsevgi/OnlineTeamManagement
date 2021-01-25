@@ -51,7 +51,7 @@ class TaskDetail extends StatelessWidget {
                               task: Task(
                                   content: "Hello",
                                   members: ["1", "2"],
-                                  dueDate: Timestamp.now()),
+                                  dueDate: DateTime.now()),
                             ),
                           ),
                         ),
@@ -83,14 +83,16 @@ class TaskDetail extends StatelessWidget {
                           child: SizedBox(
                               height: 50,
                               width: context.dynamicWidth(0.6),
-                              child: userCard(context)),
+                              child: userCard(
+                                  context, "Sıla Eryılmaz", "sıla@gmail.com")),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: SizedBox(
                               height: 50,
                               width: context.dynamicWidth(0.6),
-                              child: userCard(context)),
+                              child: userCard(
+                                  context, "Aytuğ Sevgi", "aytug@gmail.com")),
                         ),
                       ],
                     ),
@@ -107,11 +109,12 @@ class TaskDetail extends StatelessWidget {
                       flex: 48,
                       child: ListView(
                         children: [
-                          commentCard(),
-                          commentCard(),
-                          commentCard(),
-                          commentCard(),
-                          commentCard(),
+                          commentCard("ceren@gmail.com", "Awesome!"),
+                          commentCard("beyza@gmail.com",
+                              "You have to deliver before due date"),
+                          commentCard("sıla@gmail.com", "That was hard task"),
+                          commentCard(
+                              "aytug@gmail.com", "I think we need review"),
                         ],
                       ))
                 ],
@@ -122,7 +125,7 @@ class TaskDetail extends StatelessWidget {
         ));
   }
 
-  Widget userCard(BuildContext context) {
+  Widget userCard(BuildContext context, String name, String email) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
@@ -164,13 +167,13 @@ class TaskDetail extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       FittedBox(
-                        child: Text("Aytuğ Sevgi",
+                        child: Text(name,
                             style: TextStyle(
                                 color: context.themeData.primaryColorDark,
                                 fontWeight: FontWeight.w600)),
                       ),
                       FittedBox(
-                        child: Text("aytug@gmail.com",
+                        child: Text(email,
                             style: TextStyle(
                                 color: context.themeData.primaryColorDark)),
                       ),
@@ -182,7 +185,7 @@ class TaskDetail extends StatelessWidget {
     );
   }
 
-  Widget commentCard() {
+  Widget commentCard(String sender, String message) {
     return ListTile(
       contentPadding: EdgeInsets.symmetric(horizontal: 10),
       leading: Padding(
@@ -195,7 +198,7 @@ class TaskDetail extends StatelessWidget {
         text: TextSpan(
           children: [
             TextSpan(
-              text: "ceren@gmail.com  ",
+              text: "$sender  ",
               style: TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -203,7 +206,7 @@ class TaskDetail extends StatelessWidget {
               ),
             ),
             TextSpan(
-                text: "Awesome!",
+                text: "$message",
                 style: TextStyle(color: Colors.black, fontSize: 12)),
           ],
         ),

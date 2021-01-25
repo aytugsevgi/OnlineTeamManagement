@@ -1,30 +1,37 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:online_team_management/model/Task.dart';
+import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/service/task_service.dart';
 import 'package:online_team_management/service/user_service.dart';
+import 'package:uuid/uuid.dart';
 
-class TaskController {
-  String taskId;
-  String teamId;
-  List<String> members;
-  String content;
-  Timestamp dueDate;
-  Timestamp createdAt;
+class TaskController with ChangeNotifier {
+  List<User> tempUsers = [];
+  List<String> members = [];
+  String content = "";
+  DateTime dueDate = DateTime(2021, 2, 20);
+  DateTime createdAt;
 
-  Future<String> addTask(Task task) async {
-    DateTime date = DateTime.now();
-    Timestamp createdAt = Timestamp.fromDate(date);
+  void deleteUserFromList(index) {
+    tempUsers.removeAt(index);
+    print(tempUsers.length);
+    notifyListeners();
+  }
 
+  Future<void> addTask(String teamId) async {
+    DateTime createdAt = DateTime.now();
+    var uuid = Uuid();
+    String id = uuid.v1();
     Task task = new Task(
-        taskId: taskId,
+        taskId: id,
         teamId: teamId,
         members: members,
         content: content,
         dueDate: dueDate,
         createdAt: createdAt);
 
-    return TaskService().addTask(task);
+    await TaskService().addTask(task);
   }
 
   Future<void> updateTaskContent(String taskId, String givenContent) async {

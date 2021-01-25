@@ -17,7 +17,7 @@ class ProgressTaskDetail extends StatelessWidget {
           elevation: 0,
           centerTitle: false,
           title: Text(
-            "Comment Me!",
+            "Task Detail",
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: context.themeData.primaryColorDark,
@@ -48,7 +48,7 @@ class ProgressTaskDetail extends StatelessWidget {
                         task: Task(
                             content: "Hello",
                             members: ["1", "2"],
-                            dueDate: Timestamp.now()),
+                            dueDate: DateTime.now()),
                       ),
                     ),
                   ),
@@ -80,14 +80,16 @@ class ProgressTaskDetail extends StatelessWidget {
                     child: SizedBox(
                         height: 50,
                         width: context.dynamicWidth(0.6),
-                        child: userCard(context)),
+                        child: userCard(
+                            context, "Ceren Erdoğan", "ceren@gmail.com")),
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
                         height: 50,
                         width: context.dynamicWidth(0.6),
-                        child: userCard(context)),
+                        child: userCard(
+                            context, "Beyza Sığınmış", "beyza@gmail.com")),
                   ),
                 ],
               ),
@@ -96,7 +98,7 @@ class ProgressTaskDetail extends StatelessWidget {
         ));
   }
 
-  Widget userCard(BuildContext context) {
+  Widget userCard(BuildContext context, String name, String email) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
@@ -138,13 +140,13 @@ class ProgressTaskDetail extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       FittedBox(
-                        child: Text("Aytuğ Sevgi",
+                        child: Text(name,
                             style: TextStyle(
                                 color: context.themeData.primaryColorDark,
                                 fontWeight: FontWeight.w600)),
                       ),
                       FittedBox(
-                        child: Text("aytug@gmail.com",
+                        child: Text(email,
                             style: TextStyle(
                                 color: context.themeData.primaryColorDark)),
                       ),

@@ -41,7 +41,7 @@ class RepoView extends StatelessWidget {
                     task: Task(
                         content: "Hello",
                         members: ["1", "2"],
-                        dueDate: Timestamp.now()),
+                        dueDate: DateTime.now()),
                   ),
                 ),
               ),

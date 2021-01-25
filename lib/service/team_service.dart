@@ -32,6 +32,21 @@ class TeamService {
     }
   }
 
+  Future<bool> addTaskToTeam(String teamId, Task task) async {
+    try {
+      Team team = await searchTeam(teamId);
+      team.tasks.add(task.taskId);
+      await Firestore.instance
+          .collection('teams')
+          .document(teamId)
+          .setData(team.toJson());
+      return true;
+    } catch (e) {
+      print("DEBUG: Error addTaskToTeam Service: $e");
+      return false;
+    }
+  }
+
   Future<Team> searchTeam(String teamId) async {
     DocumentSnapshot _snapshot =
         await Firestore.instance.collection('teams').document(teamId).get();
@@ -91,9 +106,11 @@ class TeamService {
       Map<String, dynamic> temp = foundTeamsTasks.data;
       print("**1");
       Team team = Team.fromJson(temp);
-
-      for (var x in team.tasks) {
+      print("**2");
+      for (String x in team.tasks) {
+        print(x);
         taskList.add(await TaskService().searchTask(x));
+        print("**3");
       }
       return taskList;
     } catch (e) {

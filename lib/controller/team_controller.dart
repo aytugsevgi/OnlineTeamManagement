@@ -10,7 +10,6 @@ import 'package:online_team_management/service/user_service.dart';
 import 'package:uuid/uuid.dart';
 
 class TeamController with ChangeNotifier {
-  String teamId;
   String managerId;
   List<String> members;
   String teamName;
