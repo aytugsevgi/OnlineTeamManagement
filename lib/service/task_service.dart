@@ -74,4 +74,32 @@ class TaskService {
   }
 
   Future<String> checkCompletedTask(@required String taskId) async {}
+
+  Future<Task> searchTask(@required String taskId) async {
+    DocumentSnapshot _snapshot =
+        await Firestore.instance.collection('tasks').document(taskId).get();
+    Task task = Task.fromJson(_snapshot.data);
+    return task;
+  }
+
+  Future<List<Task>> getAllTask() async {
+    List<DocumentSnapshot> templist;
+    List<Map<dynamic, dynamic>> list = new List();
+    List<Task> allTask = new List();
+
+    CollectionReference collectionRef = Firestore.instance.collection("tasks");
+    QuerySnapshot collectionSnapshot = await collectionRef.getDocuments();
+
+    templist = collectionSnapshot.documents;
+
+    list = templist.map((DocumentSnapshot docSnapshot) {
+      return docSnapshot.data;
+    }).toList();
+
+    for (var x in list) {
+      Task task = Task.fromJson(x);
+      allTask.add(task);
+    }
+    return allTask;
+  }
 }

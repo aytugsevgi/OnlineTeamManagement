@@ -1,7 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:online_team_management/model/Task.dart';
 import 'package:online_team_management/model/Team.dart';
 import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/service/auth_service.dart';
+import 'package:online_team_management/service/task_service.dart';
 
 class UserService {
   Firestore _firestore = Firestore.instance;
@@ -63,6 +66,19 @@ class UserService {
       print("DEBUG: Error couldn't get user's tems $e");
       return null;
     }
+  }
+
+  Future<List<Task>> getUserTasks() async {
+    List<Task> allTask = await TaskService().getAllTask();
+
+    List<Task> currentUsersTasks = new List();
+
+    for (var x in allTask) {
+      if (x.members.contains(AuthService().currentUserId())) {
+        currentUsersTasks.add(x);
+      }
+    }
+    return currentUsersTasks;
   }
 
   Future<List<DocumentSnapshot>> searchUserFromEmail(String searchText) async {

@@ -6,6 +6,7 @@ import 'package:online_team_management/controller/team_controller.dart';
 import 'package:online_team_management/theme/theme.dart';
 import 'package:online_team_management/view/auth_view/login_view.dart';
 import 'package:online_team_management/view/home_view/home_view.dart';
+import 'package:online_team_management/view/team_view/team_detail_view.dart';
 import "package:provider/provider.dart";
 
 main() {
