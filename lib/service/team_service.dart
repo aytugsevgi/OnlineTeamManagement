@@ -84,11 +84,30 @@ class TeamService {
   }
 
   Future<List<Task>> getTeamTasks(String teamId) async {
-    DocumentSnapshot foundTeamsTasks =
-        await _firestore.collection("teams").document("teamId").get();
-    Map<String, dynamic> temp = foundTeamsTasks.data;
-    Team team = Team.fromJson(temp);
+    try {
+      DocumentSnapshot foundTeamsTasks =
+          await _firestore.collection("teams").document("teamId").get();
+      Map<String, dynamic> temp = foundTeamsTasks.data;
+      Team team = Team.fromJson(temp);
 
-    return team.tasks;
+      return team.tasks;
+    } catch (e) {
+      print("DEBUG: Error couldn't get team's tasks!");
+      return null;
+    }
+  }
+
+  Future<List<User>> getTeamMembers(String teamId) async {
+    try {
+      DocumentSnapshot foundTeamsTasks =
+          await _firestore.collection("teams").document("teamId").get();
+      Map<String, dynamic> temp = foundTeamsTasks.data;
+      Team team = Team.fromJson(temp);
+
+      return team.members;
+    } catch (e) {
+      print("DEBUG: Error couldn't get team's members!");
+      return null;
+    }
   }
 }
