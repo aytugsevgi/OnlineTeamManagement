@@ -1,4 +1,4 @@
-# online_team_management
+# Online Team Management Tool
 
 We made a Online Team Management App. Thanks to my project friends [@erdoganceren](https://github.com/erdoganceren), [@beyzasgnms](https://github.com/beyzasgnms), [@SilaEryilmaz](https://github.com/SilaEryilmaz),
 
