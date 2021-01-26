@@ -4,7 +4,7 @@ A new Flutter project.
 
 ## App Gif
 
-![gif1](assets/appAssets/otvideo2.gif)
+![gif1](assets/appAssets/otvideo2.gif | width=425)
 
 ## App Screenshots
 
