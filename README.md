@@ -1,10 +1,10 @@
 # online_team_management
 
-A new Flutter project.
+We made a Online Team Management App. Thanks to my project friends [@erdoganceren](https://github.com/erdoganceren), [@beyzasgnms](https://github.com/beyzasgnms), [@SilaEryilmaz](https://github.com/SilaEryilmaz),
 
 ## App Gif
 
-![gif1](assets/appAssets/otvideo2.gif | width=425)
+<img src="assets/appAssets/otvideo2.gif" width="425"/>
 
 ## App Screenshots
 
