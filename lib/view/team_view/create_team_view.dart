@@ -1,3 +1,4 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_team_management/controller/team_controller.dart';
@@ -6,6 +7,8 @@ import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/view/team_view/widget/team_card.dart';
 import 'package:online_team_management/view/team_view/widget/user_card.dart';
+import 'package:online_team_management/widget/loading_view.dart';
+import 'package:online_team_management/widget/transparent_route.dart';
 import 'package:provider/provider.dart';
 
 class CreateTeamView extends StatelessWidget {
@@ -125,10 +128,26 @@ class CreateTeamView extends StatelessWidget {
                     alignment: Alignment(0.90, 0.3),
                     child: FloatingActionButton.extended(
                         onPressed: () async {
-                          await Provider.of<TeamController>(context,
+                          Navigator.push(
+                              context,
+                              TransparentRoute(
+                                  builder: (context) => LoadingView()));
+                          bool isCreated = await Provider.of<TeamController>(
+                                  context,
                                   listen: false)
                               .createTeam();
                           Navigator.pop(context);
+                          if (isCreated) {
+                            print(isCreated);
+                            Navigator.pop(context, true);
+                          } else {
+                            print(isCreated);
+                            Flushbar(
+                              title: "Oops",
+                              message: "Something went wrong.",
+                              duration: Duration(seconds: 2),
+                            )..show(context);
+                          }
                         },
                         label: Text("Create")),
                   ),
@@ -159,7 +178,24 @@ class CreateTeamView extends StatelessWidget {
         keyboardType: TextInputType.emailAddress,
         onFieldSubmitted: (value) {
           Provider.of<TeamController>(context, listen: false)
-              .searchUserFromEmail();
+              .searchUserFromEmail()
+              .then((error) {
+            if (error != null) {
+              if (error == 1) {
+                Flushbar(
+                  title: "Oops",
+                  message: "You're already member.",
+                  duration: Duration(seconds: 2),
+                )..show(context);
+              } else {
+                Flushbar(
+                  title: "Oops",
+                  message: "I can't found any user.",
+                  duration: Duration(seconds: 2),
+                )..show(context);
+              }
+            }
+          });
         },
         onChanged: (value) {
           Provider.of<TeamController>(context, listen: false).searchText =
@@ -178,7 +214,24 @@ class CreateTeamView extends StatelessWidget {
                 ),
                 onPressed: () {
                   Provider.of<TeamController>(context, listen: false)
-                      .searchUserFromEmail();
+                      .searchUserFromEmail()
+                      .then((error) {
+                    if (error != null) {
+                      if (error == 1) {
+                        Flushbar(
+                          title: "Oops",
+                          message: "You're already member.",
+                          duration: Duration(seconds: 2),
+                        )..show(context);
+                      } else {
+                        Flushbar(
+                          title: "Oops",
+                          message: "I can't found any user.",
+                          duration: Duration(seconds: 2),
+                        )..show(context);
+                      }
+                    }
+                  });
                 }),
           ),
           contentPadding: EdgeInsets.symmetric(horizontal: 12),

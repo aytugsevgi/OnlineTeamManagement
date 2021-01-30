@@ -18,12 +18,14 @@ class ProgressTaskDetail extends StatefulWidget {
 }
 
 class _ProgressTaskDetailState extends State<ProgressTaskDetail> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: context.themeData.primaryColorLight,
-        floatingActionButton: !widget.task.isDone
-            ? FloatingActionButton.extended(
+  Widget _floatingActionButton(context) {
+    return FutureBuilder(
+      future: Provider.of<TaskController>(context, listen: false)
+          .isTaskBelongCurrentUser(widget.task),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData && snapshot.data && !widget.task.isDone) {
+            return FloatingActionButton.extended(
                 backgroundColor: Color(0xFF74CCA2),
                 onPressed: () async {
                   widget.task.isDone = true;
@@ -31,8 +33,19 @@ class _ProgressTaskDetailState extends State<ProgressTaskDetail> {
                       .checkCompletedTask(widget.task);
                   setState(() {});
                 },
-                label: Text("Check Task"))
-            : null,
+                label: Text("Check Task"));
+          }
+        }
+        return SizedBox.shrink();
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: context.themeData.primaryColorLight,
+        floatingActionButton: _floatingActionButton(context),
         appBar: AppBar(
           elevation: 0,
           centerTitle: false,

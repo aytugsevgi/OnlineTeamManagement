@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:online_team_management/model/Task.dart';
 import 'package:online_team_management/model/Team.dart';
@@ -68,7 +69,13 @@ class TeamController with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> searchUserFromEmail() async {
+  Future<bool> isManager(Team team) async {
+    String userId = await AuthService().currentUserId();
+
+    return team.managerId == userId;
+  }
+
+  Future<int> searchUserFromEmail() async {
     List<DocumentSnapshot> _documents =
         await UserService().searchUserFromEmail(searchText);
     if (_documents.isNotEmpty) {
@@ -78,19 +85,27 @@ class TeamController with ChangeNotifier {
       print("DEBUG: User Id: ${_user.userId}");
       if (currentUserId == _user.userId) {
         _user = null;
+        return 1;
       }
     } else {
       _user = null;
+      return 2;
     }
     notifyListeners();
+    return null;
   }
 
   Future<bool> createTeam() async {
-    isCreatedTeamLoading = true;
     var uuid = Uuid();
     String id = uuid.v1();
-
+    print(createdTeamName);
+    if (createdTeamName == null ||
+        createdTeamName.length == 0 ||
+        createdTeamName == "Team Name") {
+      return false;
+    }
     try {
+      isCreatedTeamLoading = true;
       String userId = await AuthService().currentUserId();
       print(userId);
       Team team = new Team(

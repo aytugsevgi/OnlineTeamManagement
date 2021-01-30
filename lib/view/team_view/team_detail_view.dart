@@ -25,34 +25,8 @@ class TeamDetailView extends StatefulWidget {
 class _TeamDetailViewState extends State<TeamDetailView> {
   @override
   Widget build(BuildContext context) {
-    List<User> teamMembers = [];
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Provider.of<TaskController>(context, listen: false).members = [];
-          Provider.of<TaskController>(context, listen: false).content = "";
-          Provider.of<TaskController>(context, listen: false).tempUsers =
-              teamMembers;
-          Navigator.of(context)
-              .push(MaterialPageRoute(
-                  builder: (context) => CreateTaskView(
-                        team: widget.team,
-                      )))
-              .then((value) {
-            if (value != null) {
-              setState(() {});
-            }
-          });
-          ;
-        },
-        label: Text(
-          "Create Task",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-              color: context.themeData.primaryColorLight,
-              fontSize: context.dynamicWidth(0.04)),
-        ),
-      ),
+      floatingActionButton: _floatingActionButton(context),
       backgroundColor: context.themeData.primaryColorLight,
       appBar: AppBar(
         elevation: 0,
@@ -94,7 +68,8 @@ class _TeamDetailViewState extends State<TeamDetailView> {
                   if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasData) {
                       List<User> users = snapshot.data;
-                      teamMembers = users;
+                      Provider.of<TaskController>(context, listen: false)
+                          .tempUsers = users;
                       return ListView.builder(
                         itemCount: users.length,
                         primary: false,
@@ -168,7 +143,9 @@ class _TeamDetailViewState extends State<TeamDetailView> {
                                                   page: ProgressTaskDetail(
                                                       task: tasks[index])))
                                               .then((value) {
-                                            setState(() {});
+                                            if (value != null) {
+                                              setState(() {});
+                                            }
                                           });
                                         },
                                         child: TaskCard(colors: [
@@ -192,5 +169,45 @@ class _TeamDetailViewState extends State<TeamDetailView> {
         ],
       ),
     );
+  }
+
+  Widget _floatingActionButton(BuildContext context) {
+    return FutureBuilder<bool>(
+        future: Provider.of<TeamController>(context, listen: false)
+            .isManager(widget.team),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData && snapshot.data) {
+              return FloatingActionButton.extended(
+                onPressed: () {
+                  Provider.of<TaskController>(context, listen: false).members =
+                      [];
+                  Provider.of<TaskController>(context, listen: false).content =
+                      "";
+
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(
+                          builder: (context) => CreateTaskView(
+                                team: widget.team,
+                              )))
+                      .then((value) {
+                    setState(() {});
+                  });
+                  ;
+                },
+                label: Text(
+                  "Create Task",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                      color: context.themeData.primaryColorLight,
+                      fontSize: context.dynamicWidth(0.04)),
+                ),
+              );
+            } else {
+              return SizedBox.shrink();
+            }
+          }
+          return SizedBox.shrink();
+        });
   }
 }

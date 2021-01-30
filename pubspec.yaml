@@ -38,6 +38,7 @@ dependencies:
   awesome_page_transitions: ^1.0.0
   flutter_zoom_drawer: ^1.0.4+1
   intl:
+  syncfusion_flutter_datepicker: ^18.4.39-beta
 dev_dependencies:
   flutter_test:
     sdk: flutter

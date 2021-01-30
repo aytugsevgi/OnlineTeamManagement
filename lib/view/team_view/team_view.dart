@@ -8,7 +8,12 @@ import 'package:online_team_management/view/team_view/create_team_view.dart';
 import 'package:online_team_management/view/team_view/widget/team_card.dart';
 import 'package:provider/provider.dart';
 
-class TeamView extends StatelessWidget {
+class TeamView extends StatefulWidget {
+  @override
+  _TeamViewState createState() => _TeamViewState();
+}
+
+class _TeamViewState extends State<TeamView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -27,12 +32,17 @@ class TeamView extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
           onPressed: () {
             Navigator.push(
-                context,
-                AwesomePageRoute(
-                    transitionDuration: Duration(milliseconds: 400),
-                    exitPage: TeamView(),
-                    enterPage: CreateTeamView(),
-                    transition: CubeTransition()));
+                    context,
+                    AwesomePageRoute(
+                        transitionDuration: Duration(milliseconds: 400),
+                        exitPage: TeamView(),
+                        enterPage: CreateTeamView(),
+                        transition: CubeTransition()))
+                .then((value) {
+              if (value != null) {
+                setState(() {});
+              }
+            });
           },
           label: Row(
             children: [
