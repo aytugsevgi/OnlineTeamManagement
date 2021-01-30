@@ -2,20 +2,18 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:online_team_management/model/Task.dart';
 import 'package:online_team_management/theme/theme.dart';
 import 'package:online_team_management/util/extension.dart';
 
 class TaskCard extends StatelessWidget {
-  int index;
   Task task;
   List<Color> colors;
-  bool isDone;
+
   TaskCard(
       {Key key,
-      this.index,
       this.task,
-      this.isDone,
       this.colors = const [
         Color(0xFF3F51EB),
         Color(0xFF3F51EB),
@@ -49,7 +47,8 @@ class TaskCard extends StatelessWidget {
               Expanded(
                 flex: 22,
                 child: FittedBox(
-                  child: Text("Due Date\n14.02.2021",
+                  child: Text(
+                      "Due Date\n${DateFormat('dd.MM.yyyy').format(task.dueDate)}",
                       textAlign: TextAlign.center,
                       style: themeLight.textTheme.bodyText1.copyWith(
                           fontSize: 10,
@@ -68,7 +67,8 @@ class TaskCard extends StatelessWidget {
               Spacer(flex: 2),
               Expanded(
                 flex: 52,
-                child: Text("Ui of the task screen will be done.",
+                child: Text(task.content,
+                    textAlign: TextAlign.center,
                     style: themeLight.textTheme.bodyText1.copyWith(
                         color: context.themeData.primaryColorDark,
                         fontWeight: FontWeight.bold)),
@@ -78,7 +78,7 @@ class TaskCard extends StatelessWidget {
               ),
               Expanded(
                 flex: 20,
-                child: cardRightArea(context, isDone),
+                child: cardRightArea(context, task.isDone),
               )
             ],
           )),

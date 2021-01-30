@@ -1,14 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:online_team_management/controller/task_controller.dart';
 import 'package:online_team_management/model/Task.dart';
 import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/view/task_view/widget/task_card.dart';
 import 'package:online_team_management/view/team_view/widget/user_card.dart';
+import 'package:provider/provider.dart';
 
 class TaskDetail extends StatelessWidget {
-  int index;
-  TaskDetail({this.index});
+  Task task;
+  TaskDetail({this.task});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,7 +35,7 @@ class TaskDetail extends StatelessWidget {
                   Expanded(
                     flex: 22,
                     child: Hero(
-                      tag: "$index",
+                      tag: "${task.taskId}",
                       child: Material(
                         child: Center(
                           child: ConstrainedBox(
@@ -42,16 +44,12 @@ class TaskDetail extends StatelessWidget {
                               maxWidth: context.dynamicWidth(0.8),
                             ),
                             child: TaskCard(
-                              isDone: true,
                               colors: [
                                 Color(0xFF74CCA2),
                                 Color(0xFF74CCA2),
                                 Color(0xFF9EE8D1),
                               ],
-                              task: Task(
-                                  content: "Hello",
-                                  members: ["1", "2"],
-                                  dueDate: DateTime.now()),
+                              task: task,
                             ),
                           ),
                         ),
@@ -75,27 +73,38 @@ class TaskDetail extends StatelessWidget {
                   Spacer(flex: 3),
                   Expanded(
                     flex: 13,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                              height: 50,
-                              width: context.dynamicWidth(0.6),
-                              child: userCard(
-                                  context, "Sıla Eryılmaz", "sıla@gmail.com")),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                              height: 50,
-                              width: context.dynamicWidth(0.6),
-                              child: userCard(
-                                  context, "Aytuğ Sevgi", "aytug@gmail.com")),
-                        ),
-                      ],
-                    ),
+                    child: FutureBuilder<List<User>>(
+                        future:
+                            Provider.of<TaskController>(context, listen: false)
+                                .getTaskMembers(task),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
+                            if (snapshot.hasData) {
+                              List<User> users = snapshot.data;
+                              return ListView.builder(
+                                itemCount: users.length,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  User user = users[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                        height: 50,
+                                        width: context.dynamicWidth(0.6),
+                                        child: userCard(
+                                            context,
+                                            "${user.firstName} ${user.lastName}",
+                                            "${user.email}")),
+                                  );
+                                },
+                              );
+                            } else {
+                              return SizedBox.shrink();
+                            }
+                          }
+                          return Center(child: CircularProgressIndicator());
+                        }),
                   ),
                   Spacer(flex: 2),
                   Center(

@@ -4,6 +4,8 @@ import 'package:online_team_management/model/Team.dart';
 import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/view/task_view/widget/text_field.dart';
 import 'package:online_team_management/view/team_view/widget/user_card.dart';
+import 'package:online_team_management/widget/loading_view.dart';
+import 'package:online_team_management/widget/transparent_route.dart';
 import 'package:provider/provider.dart';
 
 class CreateTaskView extends StatelessWidget {
@@ -11,11 +13,18 @@ class CreateTaskView extends StatelessWidget {
   CreateTaskView({this.team});
   @override
   Widget build(BuildContext context) {
+    FocusScopeNode node = FocusScopeNode();
     return Scaffold(
+      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomPadding: false,
       floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            Provider.of<TaskController>(context, listen: false)
+          onPressed: () async {
+            Navigator.push(
+                context, TransparentRoute(builder: (context) => LoadingView()));
+            await Provider.of<TaskController>(context, listen: false)
                 .addTask(team.teamId);
+            Navigator.pop(context);
+            Navigator.pop(context, true);
           },
           label: Text("Create")),
       body: Column(
@@ -38,7 +47,13 @@ class CreateTaskView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: TextField(
+                onChanged: (value) {
+                  Provider.of<TaskController>(context, listen: false).content =
+                      value;
+                },
                 style: TextStyle(color: Colors.black87),
+                autofocus: true,
+                textInputAction: TextInputAction.next,
                 decoration: InputDecoration(
                     hintText: "Content",
                     labelStyle: TextStyle(color: Colors.black45),
@@ -54,7 +69,9 @@ class CreateTaskView extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 18.0),
               child: TextField(
+                autofocus: false,
                 style: TextStyle(color: Colors.black87),
+                textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                     hintText: "Due Date",
                     labelStyle: TextStyle(color: Colors.black45),

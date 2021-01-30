@@ -74,11 +74,11 @@ class UserService {
   Future<List<Task>> getUserTasks() async {
     try {
       List<Task> allTask = await TaskService().getAllTask();
-
+      print("DEBUG: All Tasks Length: ${allTask.length}");
       List<Task> currentUserTasks = new List();
-
+      String userId = await AuthService().currentUserId();
       for (var x in allTask) {
-        if (x.members.contains(AuthService().currentUserId())) {
+        if (x.members.contains(userId)) {
           currentUserTasks.add(x);
         }
       }
@@ -87,6 +87,21 @@ class UserService {
       print("DEBUG: Error couldn't get user's task!");
       return null;
     }
+  }
+
+  Future<List<Task>> getTasksFromUserTeams() async {
+    List<Team> teams = await getTeams();
+    List<Task> allTask = await TaskService().getAllTask();
+    List<Task> tasksFromUserTeams = [];
+    for (Task task in allTask) {
+      for (Team team in teams) {
+        if (task.teamId == team.teamId) {
+          tasksFromUserTeams.add(task);
+        }
+      }
+    }
+    print("DEBUG: User Team's Tasks Length: ${tasksFromUserTeams.length}");
+    return tasksFromUserTeams;
   }
 
   Future<List<DocumentSnapshot>> searchUserFromEmail(String searchText) async {

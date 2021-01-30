@@ -14,9 +14,15 @@ import 'package:online_team_management/view/team_view/widget/team_detail_card.da
 import 'package:online_team_management/widget/fade_route.dart';
 import 'package:provider/provider.dart';
 
-class TeamDetailView extends StatelessWidget {
+class TeamDetailView extends StatefulWidget {
   Team team;
   TeamDetailView({@required this.team});
+
+  @override
+  _TeamDetailViewState createState() => _TeamDetailViewState();
+}
+
+class _TeamDetailViewState extends State<TeamDetailView> {
   @override
   Widget build(BuildContext context) {
     List<User> teamMembers = [];
@@ -27,10 +33,17 @@ class TeamDetailView extends StatelessWidget {
           Provider.of<TaskController>(context, listen: false).content = "";
           Provider.of<TaskController>(context, listen: false).tempUsers =
               teamMembers;
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => CreateTaskView(
-                    team: team,
-                  )));
+          Navigator.of(context)
+              .push(MaterialPageRoute(
+                  builder: (context) => CreateTaskView(
+                        team: widget.team,
+                      )))
+              .then((value) {
+            if (value != null) {
+              setState(() {});
+            }
+          });
+          ;
         },
         label: Text(
           "Create Task",
@@ -76,7 +89,7 @@ class TeamDetailView extends StatelessWidget {
             flex: 20,
             child: FutureBuilder<List<User>>(
                 future: Provider.of<TeamController>(context, listen: false)
-                    .getTeamsUsers(team.teamId),
+                    .getTeamsUsers(widget.team.teamId),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasData) {
@@ -129,7 +142,7 @@ class TeamDetailView extends StatelessWidget {
               flex: 69,
               child: FutureBuilder<List<Task>>(
                   future: Provider.of<TeamController>(context, listen: false)
-                      .getTeamsTasks(team.teamId),
+                      .getTeamsTasks(widget.team.teamId),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if (snapshot.hasData) {
@@ -137,41 +150,36 @@ class TeamDetailView extends StatelessWidget {
                         return ListView.builder(
                           itemCount: tasks.length,
                           itemBuilder: (context, index) {
+                            print(tasks[index].content);
                             return Hero(
-                              tag: "$index",
-                              child: Material(
-                                child: SizedBox(
-                                  height: context.dynamicHeight(0.18),
-                                  width: context.dynamicWidth(1),
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: context.dynamicHeight(0.05),
-                                    ),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(FadeRoute(
-                                            page: ProgressTaskDetail(
-                                          index: index,
-                                        )));
-                                      },
-                                      child: TaskCard(
-                                        index: index,
-                                        isDone: false,
-                                        colors: [
+                                tag: "${tasks[index].taskId}",
+                                child: Material(
+                                  child: SizedBox(
+                                    height: context.dynamicHeight(0.18),
+                                    width: context.dynamicWidth(1),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: context.dynamicHeight(0.05),
+                                      ),
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context)
+                                              .push(FadeRoute(
+                                                  page: ProgressTaskDetail(
+                                                      task: tasks[index])))
+                                              .then((value) {
+                                            setState(() {});
+                                          });
+                                        },
+                                        child: TaskCard(colors: [
                                           Color(0xFF74CCA2),
                                           Color(0xFF74CCA2),
                                           Color(0xFF9EE8D1),
-                                        ],
-                                        task: Task(
-                                            content: "Hello",
-                                            members: ["1", "2"],
-                                            dueDate: DateTime.now()),
+                                        ], task: tasks[index]),
                                       ),
                                     ),
                                   ),
-                                ),
-                              ),
-                            );
+                                ));
                           },
                         );
                       }

@@ -1,8 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:online_team_management/controller/task_controller.dart';
 import 'package:online_team_management/model/Task.dart';
 import 'package:online_team_management/util/extension.dart';
+import 'package:online_team_management/view/task_view/progress_task_detail.dart';
+import 'package:online_team_management/view/task_view/task_detail.dart';
 import 'package:online_team_management/view/task_view/widget/task_card.dart';
+import 'package:online_team_management/widget/fade_route.dart';
 
 class TaskView extends StatelessWidget {
   @override
@@ -40,59 +44,52 @@ class TaskView extends StatelessWidget {
             ),
             Spacer(flex: 3),
             Expanded(
-                flex: 86,
-                child: ListView(
-                  children: [
-                    SizedBox(
-                      height: context.dynamicHeight(0.18),
-                      width: context.dynamicWidth(0.8),
-                      child: TaskCard(
-                        isDone: false,
-                        colors: [
-                          Color(0xFF74CCA2),
-                          Color(0xFF74CCA2),
-                          Color(0xFF9EE8D1),
-                        ],
-                        task: Task(
-                            content: "Hello",
-                            members: ["1", "2"],
-                            dueDate: DateTime.now()),
-                      ),
-                    ),
-                    SizedBox(
-                      height: context.dynamicHeight(0.18),
-                      width: context.dynamicWidth(0.8),
-                      child: TaskCard(
-                        isDone: false,
-                        colors: [
-                          Color(0xFF74CCA2),
-                          Color(0xFF74CCA2),
-                          Color(0xFF9EE8D1),
-                        ],
-                        task: Task(
-                            content: "Hello",
-                            members: ["1", "2"],
-                            dueDate: DateTime.now()),
-                      ),
-                    ),
-                    SizedBox(
-                      height: context.dynamicHeight(0.18),
-                      width: context.dynamicWidth(0.8),
-                      child: TaskCard(
-                        isDone: true,
-                        colors: [
-                          Color(0xFF74CCA2),
-                          Color(0xFF74CCA2),
-                          Color(0xFF9EE8D1),
-                        ],
-                        task: Task(
-                            content: "Hello",
-                            members: ["1", "2"],
-                            dueDate: DateTime.now()),
-                      ),
-                    ),
-                  ],
-                ))
+              flex: 86,
+              child: FutureBuilder<List<Task>>(
+                  future: TaskController().getUserTasks(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        List<Task> tasks = snapshot.data;
+                        return ListView.builder(
+                          itemCount: tasks.length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            Task task = tasks[index];
+                            return Hero(
+                              tag: "${task.taskId}",
+                              child: Material(
+                                child: SizedBox(
+                                  height: context.dynamicHeight(0.18),
+                                  width: context.dynamicWidth(1),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Navigator.of(context).push(FadeRoute(
+                                          page: ProgressTaskDetail(
+                                        task: task,
+                                      )));
+                                    },
+                                    child: TaskCard(
+                                      colors: [
+                                        Color(0xFF74CCA2),
+                                        Color(0xFF74CCA2),
+                                        Color(0xFF9EE8D1),
+                                      ],
+                                      task: task,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      } else {
+                        return SizedBox.shrink();
+                      }
+                    }
+                    return Center(child: CircularProgressIndicator());
+                  }),
+            ),
           ],
         ),
       ),

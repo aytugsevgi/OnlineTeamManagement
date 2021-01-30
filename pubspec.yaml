@@ -37,6 +37,7 @@ dependencies:
   flushbar: ^1.10.4
   awesome_page_transitions: ^1.0.0
   flutter_zoom_drawer: ^1.0.4+1
+  intl:
 dev_dependencies:
   flutter_test:
     sdk: flutter

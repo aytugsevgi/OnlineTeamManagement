@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class Task {
   String _taskId;
@@ -7,20 +8,24 @@ class Task {
   String _content;
   DateTime _dueDate;
   DateTime _createdAt;
+  bool _isDone;
 
-  Task(
-      {String taskId,
-      String teamId,
-      List<dynamic> members,
-      String content,
-      DateTime dueDate,
-      DateTime createdAt}) {
+  Task({
+    String taskId,
+    String teamId,
+    List<dynamic> members,
+    String content,
+    DateTime dueDate,
+    DateTime createdAt,
+    bool isDone,
+  }) {
     this._taskId = taskId;
     this._teamId = teamId;
     this._members = members;
     this._content = content;
     this._dueDate = dueDate;
     this._createdAt = createdAt;
+    this._isDone = isDone;
   }
 
   String get taskId => _taskId;
@@ -35,20 +40,17 @@ class Task {
   set dueDate(DateTime dueDate) => _dueDate = dueDate;
   DateTime get createdAt => _createdAt;
   set createdAt(DateTime createdAt) => _createdAt = createdAt;
+  bool get isDone => _isDone;
+  set isDone(bool isDone) => _isDone = isDone;
 
   Task.fromJson(Map<String, dynamic> json) {
-    print("x1");
     _taskId = json['taskId'];
-    print("x2");
     _teamId = json['teamId'];
-    print("x3");
     _members = json['members'];
-    print("x4");
     _content = json['content'];
-    print("x5");
     _dueDate = json['dueDate'].toDate();
-    print("x6");
     _createdAt = json['createdAt'].toDate();
+    _isDone = json['isDone'];
   }
 
   Map<String, dynamic> toJson() {
@@ -59,6 +61,7 @@ class Task {
     data['content'] = this._content;
     data['dueDate'] = Timestamp.fromDate(this._dueDate);
     data['createdAt'] = Timestamp.fromDate(this._createdAt);
+    data['isDone'] = this._isDone;
     return data;
   }
 }

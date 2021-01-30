@@ -1,18 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:online_team_management/controller/task_controller.dart';
 import 'package:online_team_management/model/Task.dart';
 import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/view/task_view/widget/task_card.dart';
 import 'package:online_team_management/view/team_view/widget/user_card.dart';
+import 'package:online_team_management/widget/loading_view.dart';
+import 'package:provider/provider.dart';
 
-class ProgressTaskDetail extends StatelessWidget {
-  int index;
-  ProgressTaskDetail({this.index});
+class ProgressTaskDetail extends StatefulWidget {
+  Task task;
+  ProgressTaskDetail({@required this.task});
+
+  @override
+  _ProgressTaskDetailState createState() => _ProgressTaskDetailState();
+}
+
+class _ProgressTaskDetailState extends State<ProgressTaskDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: context.themeData.primaryColorLight,
+        floatingActionButton: !widget.task.isDone
+            ? FloatingActionButton.extended(
+                backgroundColor: Color(0xFF74CCA2),
+                onPressed: () async {
+                  widget.task.isDone = true;
+                  await Provider.of<TaskController>(context, listen: false)
+                      .checkCompletedTask(widget.task);
+                  setState(() {});
+                },
+                label: Text("Check Task"))
+            : null,
         appBar: AppBar(
           elevation: 0,
           centerTitle: false,
@@ -30,7 +50,7 @@ class ProgressTaskDetail extends StatelessWidget {
             Expanded(
               flex: 22,
               child: Hero(
-                tag: "$index",
+                tag: "${widget.task.taskId}",
                 child: Material(
                   child: Center(
                     child: ConstrainedBox(
@@ -39,16 +59,12 @@ class ProgressTaskDetail extends StatelessWidget {
                         maxWidth: context.dynamicWidth(0.8),
                       ),
                       child: TaskCard(
-                        isDone: false,
                         colors: [
                           Color(0xFF74CCA2),
                           Color(0xFF74CCA2),
                           Color(0xFF9EE8D1),
                         ],
-                        task: Task(
-                            content: "Hello",
-                            members: ["1", "2"],
-                            dueDate: DateTime.now()),
+                        task: widget.task,
                       ),
                     ),
                   ),
@@ -72,27 +88,37 @@ class ProgressTaskDetail extends StatelessWidget {
             Spacer(flex: 2),
             Expanded(
               flex: 65,
-              child: ListView(
-                scrollDirection: Axis.vertical,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                        height: 50,
-                        width: context.dynamicWidth(0.6),
-                        child: userCard(
-                            context, "Ceren Erdoğan", "ceren@gmail.com")),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: SizedBox(
-                        height: 50,
-                        width: context.dynamicWidth(0.6),
-                        child: userCard(
-                            context, "Beyza Sığınmış", "beyza@gmail.com")),
-                  ),
-                ],
-              ),
+              child: FutureBuilder<List<User>>(
+                  future: Provider.of<TaskController>(context, listen: false)
+                      .getTaskMembers(widget.task),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        List<User> users = snapshot.data;
+                        return ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: users.length,
+                          itemBuilder: (context, index) {
+                            User user = users[index];
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                  height: 50,
+                                  width: context.dynamicWidth(0.6),
+                                  child: userCard(
+                                      context,
+                                      "${user.firstName} ${user.lastName}",
+                                      "${user.email}")),
+                            );
+                          },
+                        );
+                      }
+                      return SizedBox.shrink();
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }),
             ),
           ],
         ));

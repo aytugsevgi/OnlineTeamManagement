@@ -109,7 +109,9 @@ class TeamService {
       print("**2");
       for (String x in team.tasks) {
         print(x);
+
         taskList.add(await TaskService().searchTask(x));
+        print("DEBUG: Task Content: ${taskList.last.content}");
         print("**3");
       }
       return taskList;

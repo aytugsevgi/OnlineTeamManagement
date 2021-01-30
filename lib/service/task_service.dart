@@ -2,7 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:online_team_management/model/Task.dart';
 import 'package:online_team_management/model/Team.dart';
+import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/service/team_service.dart';
+import 'package:online_team_management/service/user_service.dart';
 
 class TaskService {
   Firestore _firestore = Firestore.instance;
@@ -76,9 +78,15 @@ class TaskService {
     }
   }
 
-  Future<String> checkCompletedTask(@required String taskId) async {}
+  Future<void> checkCompletedTask(Task task) async {
+    task.isDone = true;
+    await Firestore.instance
+        .collection('tasks')
+        .document(task.taskId)
+        .setData(task.toJson());
+  }
 
-  Future<Task> searchTask(@required String taskId) async {
+  Future<Task> searchTask(String taskId) async {
     DocumentSnapshot _snapshot =
         await Firestore.instance.collection('tasks').document(taskId).get();
     print(_snapshot.data);
@@ -105,5 +113,18 @@ class TaskService {
       allTask.add(task);
     }
     return allTask;
+  }
+
+  Future<List<User>> getTaskMembers(Task task) async {
+    List<User> userList = new List();
+    try {
+      for (var x in task.members) {
+        userList.add(await UserService().searchUser(x));
+      }
+      return userList;
+    } catch (e) {
+      print("DEBUG: Error couldn't get team's members!");
+      return null;
+    }
   }
 }

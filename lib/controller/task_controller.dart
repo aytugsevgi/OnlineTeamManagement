@@ -24,12 +24,14 @@ class TaskController with ChangeNotifier {
     var uuid = Uuid();
     String id = uuid.v1();
     Task task = new Task(
-        taskId: id,
-        teamId: teamId,
-        members: members,
-        content: content,
-        dueDate: dueDate,
-        createdAt: createdAt);
+      taskId: id,
+      teamId: teamId,
+      members: members,
+      content: content,
+      dueDate: dueDate,
+      createdAt: createdAt,
+      isDone: false,
+    );
 
     await TaskService().addTask(task);
   }
@@ -54,5 +56,13 @@ class TaskController with ChangeNotifier {
 
   Future<List<Task>> getUserTasks() async {
     return UserService().getUserTasks();
+  }
+
+  Future<List<User>> getTaskMembers(Task task) async {
+    return await TaskService().getTaskMembers(task);
+  }
+
+  Future<void> checkCompletedTask(Task task) async {
+    return await TaskService().checkCompletedTask(task);
   }
 }
