@@ -51,10 +51,10 @@ class HomeView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Spacer(
-                flex: 2,
+                flex: 1,
               ),
               Expanded(
-                flex: 4,
+                flex: 5,
                 child: Padding(
                   padding: EdgeInsets.only(left: context.dynamicWidth(0.04)),
                   child: Row(
@@ -81,6 +81,13 @@ class HomeView extends StatelessWidget {
                             color: context.themeData.primaryColorDark,
                             fontSize: context.dynamicWidth(0.05)),
                       ),
+                      Spacer(),
+                      Image.asset(
+                        "assets/diamond.png",
+                        fit: BoxFit.contain,
+                        height: 60,
+                      ),
+                      SizedBox(width: 10),
                     ],
                   ),
                 ),
