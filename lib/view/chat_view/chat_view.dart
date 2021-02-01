@@ -1,7 +1,9 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:online_team_management/util/extension.dart';
 import 'package:online_team_management/view/chat_view/chat_detail_view.dart';
+import 'package:online_team_management/view/chat_view/conference_view.dart';
 
 class ChatView extends StatelessWidget {
   @override
@@ -14,7 +16,13 @@ class ChatView extends StatelessWidget {
           backgroundColor: Color(0xFFD93634),
           child: Icon(Icons.message_rounded,
               color: context.themeData.primaryColorLight, size: 26),
-          onPressed: () {},
+          onPressed: () {
+            Flushbar(
+              title: "Sorry",
+              message: "This feature isn't implemented",
+              duration: Duration(seconds: 2),
+            )..show(context);
+          },
         ),
         body: Column(
           children: [
@@ -62,6 +70,19 @@ class ChatView extends StatelessWidget {
         style: context.themeData.textTheme.headline
             .copyWith(fontSize: 18, color: context.themeData.primaryColorDark),
       ),
+      actions: [
+        IconButton(
+            iconSize: 30,
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => ConferenceView()));
+            },
+            icon: Icon(Icons.video_call_outlined,
+                color: context.themeData.accentColor)),
+        SizedBox(
+          width: 16,
+        )
+      ],
     );
   }
 

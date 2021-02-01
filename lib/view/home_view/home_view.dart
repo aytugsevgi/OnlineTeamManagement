@@ -1,16 +1,15 @@
-import 'package:awesome_page_transitions/awesome_page_transitions.dart';
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:online_team_management/controller/home_controller.dart';
 import 'package:online_team_management/model/User.dart';
 import 'package:online_team_management/util/extension.dart';
-import 'package:online_team_management/view/auth_view/login_view.dart';
-import 'package:online_team_management/view/chat_view/chat_detail_view.dart';
 import 'package:online_team_management/view/chat_view/chat_view.dart';
 import 'package:online_team_management/view/home_view/widget/home_card.dart';
 import 'package:online_team_management/view/home_view/widget/settings_view.dart';
 import 'package:online_team_management/view/repo_view/repo_view.dart';
+import 'package:online_team_management/view/report_view/report_view.dart';
 import 'package:online_team_management/view/task_view/task_view.dart';
 import 'package:online_team_management/view/team_view/team_view.dart';
 import 'package:online_team_management/widget/fade_route.dart';
@@ -82,12 +81,21 @@ class HomeView extends StatelessWidget {
                             fontSize: context.dynamicWidth(0.05)),
                       ),
                       Spacer(),
-                      Image.asset(
-                        "assets/diamond.png",
-                        fit: BoxFit.contain,
-                        height: 60,
+                      GestureDetector(
+                        onTap: () {
+                          Flushbar(
+                            title: "Sorry",
+                            message: "This feature isn't implemented",
+                            duration: Duration(seconds: 2),
+                          )..show(context);
+                        },
+                        child: Image.asset(
+                          "assets/diamond.png",
+                          fit: BoxFit.contain,
+                          height: 60,
+                        ),
                       ),
-                      SizedBox(width: 10),
+                      SizedBox(width: 16),
                     ],
                   ),
                 ),
@@ -246,6 +254,9 @@ Widget homeTab(BuildContext context, User user) {
                 Expanded(
                   flex: 43,
                   child: HomeCard(
+                    onTap: () {
+                      Navigator.push(context, FadeRoute(page: ReportView()));
+                    },
                     colors: [
                       Color(0xFFEFC99A),
                       Color(0xFFD79B3B),
